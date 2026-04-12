@@ -23,12 +23,28 @@ pub struct Config {
     pub limits: LimitsConfig,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct HooksConfig {
     /// Commands to exclude from auto-rewrite (e.g. ["curl", "playwright"]).
     /// Survives `rtk init -g` re-runs since config.toml is user-owned.
     #[serde(default)]
     pub exclude_commands: Vec<String>,
+    /// Global toggle for hook rewriting. Set to false via `rtk disable`.
+    #[serde(default = "default_true")]
+    pub enabled: bool,
+}
+
+fn default_true() -> bool {
+    true
+}
+
+impl Default for HooksConfig {
+    fn default() -> Self {
+        Self {
+            exclude_commands: Vec::new(),
+            enabled: true,
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -219,5 +235,31 @@ history_days = 90
 "#;
         let config: Config = toml::from_str(toml).expect("valid toml");
         assert!(config.hooks.exclude_commands.is_empty());
+    }
+
+    #[test]
+    fn test_hooks_config_enabled_defaults_true() {
+        let config = Config::default();
+        assert!(config.hooks.enabled);
+    }
+
+    #[test]
+    fn test_hooks_config_enabled_roundtrips_false() {
+        let toml = r#"
+[hooks]
+enabled = false
+"#;
+        let config: Config = toml::from_str(toml).expect("valid toml");
+        assert!(!config.hooks.enabled);
+    }
+
+    #[test]
+    fn test_hooks_config_without_enabled_field_defaults_true() {
+        let toml = r#"
+[hooks]
+exclude_commands = ["curl"]
+"#;
+        let config: Config = toml::from_str(toml).expect("valid toml");
+        assert!(config.hooks.enabled);
     }
 }

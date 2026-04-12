@@ -433,6 +433,23 @@ enum Commands {
         create: bool,
     },
 
+    /// Disable RTK hook rewriting (globally or per-project)
+    Disable {
+        /// Disable for current project only (creates .rtk/disabled marker)
+        #[arg(long)]
+        project: bool,
+    },
+
+    /// Enable RTK hook rewriting (globally or per-project)
+    Enable {
+        /// Enable for current project only (removes .rtk/disabled marker)
+        #[arg(long)]
+        project: bool,
+    },
+
+    /// Show current RTK hook rewriting status
+    Status {},
+
     /// Vitest commands with compact output
     Vitest {
         #[command(subcommand)]
@@ -1787,6 +1804,21 @@ fn run_cli() -> Result<i32> {
             } else {
                 core::config::show_config()?;
             }
+            0
+        }
+
+        Commands::Disable { project } => {
+            hooks::toggle::run_disable(project)?;
+            0
+        }
+
+        Commands::Enable { project } => {
+            hooks::toggle::run_enable(project)?;
+            0
+        }
+
+        Commands::Status {} => {
+            hooks::toggle::run_status()?;
             0
         }
 
