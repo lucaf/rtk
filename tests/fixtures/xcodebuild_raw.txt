@@ -1,0 +1,297 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild build -scheme PsyScopeFramework -destination platform=macOS
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  PsyScopeTahoe: /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (2 targets)
+    Target 'PsyScopeFramework' in project 'PsyScopeTahoe'
+        ➜ Explicit dependency on target 'PsyScopeFramework' in project 'PsyScopeTahoe'
+    Target 'PsyScopeFramework' in project 'PsyScopeTahoe' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 4c9a1809a6a4a34e768be9b8b6c93806
+Build description path: /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/XCBuildData/4c9a1809a6a4a34e768be9b8b6c93806.xcbuilddata
+CreateBuildDirectory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-create-build-directory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk /Users/luca/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.4-25E236-30f9ca8789b706f8bd3fc906a70d770f.sdkstatcache
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -o /Users/luca/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.4-25E236-30f9ca8789b706f8bd3fc906a70d770f.sdkstatcache
+
+CreateBuildDirectory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-create-build-directory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex
+
+CreateBuildDirectory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-create-build-directory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-create-build-directory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-create-build-directory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug
+
+CreateBuildDirectory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/EagerLinkingTBDs/Debug
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-create-build-directory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/EagerLinkingTBDs/Debug
+
+CreateBuildDirectory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PackageFrameworks
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-create-build-directory /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PackageFrameworks
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.modulemap (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.modulemap
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.DependencyMetadataFileList (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.DependencyStaticMetadataFileList (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftFileList (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftFileList
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_const_extract_protocols.json (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftConstValuesFileList (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.LinkFileList (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.LinkFileList
+
+WriteAuxiliaryFile /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-OutputFileMap.json (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    write-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-OutputFileMap.json
+
+Copy /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/GeneratedModuleMaps/PsyScopeFramework.modulemap /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.modulemap (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.modulemap /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/GeneratedModuleMaps
+
+SwiftDriver PsyScopeFramework normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PsyScopeFramework -Onone @/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -enable-upcoming-feature StrictConcurrency -enable-experimental-feature AccessLevelOnImport -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -target arm64-apple-macos26.0 -g -module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/luca/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.4-25E236-30f9ca8789b706f8bd3fc906a70d770f.sdkstatcache -output-file-map /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -package-name psyscopetahoe_eventbased_2 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_const_extract_protocols.json -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/include -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources-normal/arm64 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources/arm64 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-Swift.h -working-directory /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stdbool-ADYSL58949KRFROP08E19P2PF.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stdarg-A5D3MNDDQ1F2LV6WUUQ3D68A3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ptrauth-E4KP9EZ84SE3WX8U7T41IRKVS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stddef-DUUJ6ZHT15R3IDMNXPCL53V1Y.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_AvailabilityInternal-BZQ0GKM4S54ET6S6AMBWA5D1P.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ptrcheck-25R3W9LSBHT54TNWK9DATWLUT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_float-6DAZRAN5GXLWF408F6NEB5NEL.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_SwiftConcurrencyShims-E3CAODC9B66M5082DHHPNDX1Z.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/SwiftShims-ENOWKFSDRE2WWEV1YVR4MVC30.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_DarwinFoundation1-46UVA7OO69MELY8GHV08QSIN6.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_limits-EEURXX018CAGS1X81N1KCART9.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_DarwinFoundation2-C59CMEF0BWDV27D5AIYCGODJ7.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/sys_types-7Z9E2E1A70BKHG5P17TUB9LD5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_stdint-8WWRJ4WJ5AZG018DV8VZDDWNX.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_DarwinFoundation3-9EGUUGGI3PNVAB0JLEZFAQ8JM.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/libDER-BO90I9R9TS2TB78LMXXGAKGHK.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/_Builtin_inttypes-AIPP47UEO8QV9K4HX6XEUPV4F.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Darwin-3NGPPSBFBUN8WWSKNT7NOTKJA.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/libkern-380UUXULB8M9XAMDFDJC8QPXR.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/MachO-CIA1SKKLUHFFCXTXL5F59E0O3.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/launch-AB6ILHH8GUPYTWC8RN6LZICTZ.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/ObjectiveC-77GAWJZZFBU15TSEUO0R1QXPS.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/os_object-91QRZ0P1FB2XMNCXPA6WSTZTN.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/os_workgroup-1A79YKXRBZ6BXZUEJPH5HWDBT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Dispatch-D5AAHOKNRRC9162M7X3XK3T22.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/XPC-3WDM16A8WBWLIE85LEUKP0DIY.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreFoundation-2RKKOVL7H56N4CEWPPCA6G7N4.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CFNetwork-EBS029CCJ85L22J7DSP7929M5.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/IOKit-4TXOIPJ3H7F5EZP138ESQJODB.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Security-DHJC7047YJTDB6IJUJH9QRQRT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreGraphics-BLH5DW1LM1D2HXCP0P5I6H3AT.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/DiskArbitration-KLJ8CTQDWWR7RLXVP6PVWNVD.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/CoreServices-C7UU0A3MXDUC3AU0PRG01NW2R.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Foundation-WQV2W6H0T8XRY0ZTWTL0BFV2.pcm
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/UniformTypeIdentifiers-S8ETTA2IMWEN6QJDY25L92GY.pcm
+
+SwiftCompile normal arm64 Compiling\ PSScriptWriter.swift,\ PSLogging.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Generation/PSScriptWriter.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/PSLogging.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Generation/PSScriptWriter.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/PSLogging.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PSScriptGrammar.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSScriptGrammar.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSScriptGrammar.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PSScriptAST.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSScriptAST.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSScriptAST.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ PsyScopeFramework (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+EmitSwiftModule normal arm64 (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PSTokenizer.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSTokenizer.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSTokenizer.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PSScriptLoader.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/PSScriptLoader.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/PSScriptLoader.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PSScriptParser.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSScriptParser.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSScriptParser.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PSTypes.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/PSTypes.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/PSTypes.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PSASTConverter.swift /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSASTConverter.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftCompile normal arm64 /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeFramework/Parsing/PSASTConverter.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for PsyScopeFramework (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriver\ Compilation\ Requirements PsyScopeFramework normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PsyScopeFramework -Onone @/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -enable-upcoming-feature StrictConcurrency -enable-experimental-feature AccessLevelOnImport -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -target arm64-apple-macos26.0 -g -module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/luca/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.4-25E236-30f9ca8789b706f8bd3fc906a70d770f.sdkstatcache -output-file-map /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -package-name psyscopetahoe_eventbased_2 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_const_extract_protocols.json -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/include -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources-normal/arm64 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources/arm64 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-Swift.h -working-directory /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSScriptWriter.swift, PSLogging.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftMergeGeneratedHeaders /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/GeneratedModuleMaps/PsyScopeFramework-Swift.h /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-Swift.h (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    builtin-swiftHeaderTool -arch arm64 /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-Swift.h -o /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/GeneratedModuleMaps/PsyScopeFramework-Swift.h
+
+Copy /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/arm64-apple-macos.swiftmodule /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftmodule (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftmodule /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/arm64-apple-macos.swiftdoc /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftdoc (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftdoc /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/arm64-apple-macos.swiftdoc
+
+Copy /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/arm64-apple-macos.abi.json /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.abi.json (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.abi.json /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/arm64-apple-macos.abi.json
+
+Copy /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftsourceinfo (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftsourceinfo /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSScriptLoader.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSScriptGrammar.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSASTConverter.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSScriptParser.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSTokenizer.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSScriptAST.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PSTypes.swift (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+
+SwiftDriver\ Compilation PsyScopeFramework normal arm64 com.apple.xcode.tools.swift.compiler (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name PsyScopeFramework -Onone @/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -DXcode -enable-upcoming-feature StrictConcurrency -enable-experimental-feature AccessLevelOnImport -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -target arm64-apple-macos26.0 -g -module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/luca/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.4-25E236-30f9ca8789b706f8bd3fc906a70d770f.sdkstatcache -output-file-map /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/luca/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -package-name psyscopetahoe_eventbased_2 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_const_extract_protocols.json -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/include -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources-normal/arm64 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources/arm64 -Xcc -I/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-Swift.h -working-directory /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/.swiftpm/xcode -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.o normal (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -r -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -O0 -F/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.LinkFileList -nostdlib -Xlinker -object_path_lto -Xlinker /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_lto.o -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.swiftmodule @/Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework-linker-args.resp -o /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.o
+
+ExtractAppIntentsMetadata (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name PsyScopeFramework --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk --xcode-version 17E192 --platform-family macOS --deployment-target 26.0 --bundle-identifier psyscopetahoe-eventbased-2.PsyScopeFramework --output /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.appintents --target-triple arm64-apple-macos26.0 --binary-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.o --dependency-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework_dependency_info.dat --stringsdata-file /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftFileList --metadata-file-list /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.DependencyMetadataFileList --static-metadata-file-list /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/PsyScopeFramework.DependencyStaticMetadataFileList --swift-const-vals-list /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Intermediates.noindex/PsyScopeTahoe.build/Debug/PsyScopeFramework.build/Objects-normal/arm64/PsyScopeFramework.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-04-12 12:11:55.710 appintentsmetadataprocessor[16801:69741475] Starting appintentsmetadataprocessor export
+2026-04-12 12:11:55.750 appintentsmetadataprocessor[16801:69741475] Extracted no relevant App Intents symbols, skipping writing output
+
+RegisterExecutionPolicyException /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.o (in target 'PsyScopeFramework' from project 'PsyScopeTahoe')
+    cd /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+    builtin-RegisterExecutionPolicyException /Users/luca/Library/Developer/Xcode/DerivedData/PsyScopeTahoe_EventBased_2-crnijwxvtximeigucmyoubjiplhs/Build/Products/Debug/PsyScopeFramework.o
+
+** BUILD SUCCEEDED **
+

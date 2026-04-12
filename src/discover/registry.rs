@@ -1585,7 +1585,7 @@ mod tests {
             Classification::Supported {
                 rtk_equivalent: "rtk swift",
                 category: "Build",
-                estimated_savings_pct: 90.0,
+                estimated_savings_pct: 80.0,
                 status: RtkStatus::Existing,
             }
         ));
@@ -1597,6 +1597,134 @@ mod tests {
             rewrite_command("swift test --parallel", &[]),
             Some("rtk swift test --parallel".into())
         );
+    }
+
+    #[test]
+    fn test_classify_swift_build() {
+        assert!(matches!(
+            classify_command("swift build"),
+            Classification::Supported {
+                rtk_equivalent: "rtk swift",
+                category: "Build",
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_classify_swift_package() {
+        assert!(matches!(
+            classify_command("swift package describe"),
+            Classification::Supported {
+                rtk_equivalent: "rtk swift",
+                category: "Build",
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_classify_swift_run() {
+        assert!(matches!(
+            classify_command("swift run MyApp"),
+            Classification::Supported {
+                rtk_equivalent: "rtk swift",
+                category: "Build",
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_classify_xcodebuild() {
+        assert!(matches!(
+            classify_command("xcodebuild build -scheme Foo"),
+            Classification::Supported {
+                rtk_equivalent: "rtk xcodebuild",
+                category: "Build",
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_rewrite_xcodebuild() {
+        assert_eq!(
+            rewrite_command("xcodebuild build -scheme Foo", &[]),
+            Some("rtk xcodebuild build -scheme Foo".into())
+        );
+    }
+
+    #[test]
+    fn test_classify_swiftlint() {
+        assert!(matches!(
+            classify_command("swiftlint lint --strict"),
+            Classification::Supported {
+                rtk_equivalent: "rtk swiftlint",
+                category: "Build",
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_rewrite_swiftlint() {
+        assert_eq!(
+            rewrite_command("swiftlint", &[]),
+            Some("rtk swiftlint".into())
+        );
+    }
+
+    #[test]
+    fn test_classify_simctl() {
+        assert!(matches!(
+            classify_command("xcrun simctl list"),
+            Classification::Supported {
+                rtk_equivalent: "rtk simctl",
+                category: "Infra",
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_rewrite_simctl() {
+        assert_eq!(
+            rewrite_command("xcrun simctl list devices", &[]),
+            Some("rtk simctl list devices".into())
+        );
+    }
+
+    #[test]
+    fn test_classify_xctrace() {
+        assert!(matches!(
+            classify_command("xctrace list templates"),
+            Classification::Supported {
+                rtk_equivalent: "rtk xctrace",
+                category: "Infra",
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_rewrite_xctrace() {
+        assert_eq!(
+            rewrite_command("xcrun xctrace record --template 'Time Profiler'", &[]),
+            Some("rtk xctrace record --template 'Time Profiler'".into())
+        );
+    }
+
+    #[test]
+    fn test_classify_bare_simctl_matches() {
+        // After #10 fix: bare "xcrun simctl" should match (word boundary, not space)
+        assert!(matches!(
+            classify_command("xcrun simctl"),
+            Classification::Supported {
+                rtk_equivalent: "rtk simctl",
+                ..
+            }
+        ));
     }
 
     // --- #336: docker compose supported subcommands rewritten, unsupported skipped ---

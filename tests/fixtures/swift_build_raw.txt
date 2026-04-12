@@ -1,0 +1,198 @@
+Building for debugging...
+[0/50] Write sources
+[4/50] Write InputResponseTest-entitlement.plist
+[5/50] Write TobiiTest-entitlement.plist
+[5/50] Write PortEditor-entitlement.plist
+[5/50] Write TrialEngineTest-entitlement.plist
+[7/50] Write sources
+[9/50] Write RenderingTest-entitlement.plist
+[9/50] Write PsyScopeTest-entitlement.plist
+[11/50] Write sources
+[12/50] Write ExtensionTest-entitlement.plist
+[13/50] Write sources
+[17/50] Copying Shaders.metal
+[18/50] Write sources
+[19/50] Write CommTest-entitlement.plist
+[20/50] Write BuilderTest-entitlement.plist
+[21/50] Copying BeepSounds
+[22/50] Write swift-version--58304C5D6DBC2206.txt
+[24/61] Compiling PsyScopeFramework PSScriptLoader.swift
+[25/61] Emitting module PsyScopeFramework
+[26/61] Compiling PsyScopeFramework PSScriptWriter.swift
+[27/61] Compiling PsyScopeFramework PSLogging.swift
+[28/62] Compiling PsyScopeFramework PSScriptGrammar.swift
+[29/62] Compiling PsyScopeFramework PSScriptParser.swift
+[30/62] Compiling PsyScopeFramework PSASTConverter.swift
+[31/62] Compiling PsyScopeFramework PSScriptAST.swift
+[32/62] Compiling PsyScopeFramework PSTypes.swift
+[33/62] Compiling PsyScopeFramework PSTokenizer.swift
+[34/127] Compiling BuilderTest InputDevicesPanel.swift
+[35/128] Compiling BuilderTest EventViews.swift
+[36/128] Compiling PortEditor PortEditorApp.swift
+[37/128] Emitting module PortEditor
+[38/128] Compiling BuilderTest PortCanvas.swift
+[38/128] Write Objects.LinkFileList
+[40/128] Compiling PsyScopeEngine PSTCPManager.swift
+[41/128] Compiling PsyScopeEngine PSUnixCommandManager.swift
+[42/128] Compiling BuilderTest DetailPanels.swift
+[42/128] Linking PortEditor
+[43/128] Applying PortEditor
+[45/128] Compiling PsyScopeEngine PSMovieIDEV.swift
+[46/128] Compiling PsyScopeEngine PSResponseCollector.swift
+[47/128] Compiling PsyScopeEngine PSSerialIDEV.swift
+[48/128] Compiling PsyScopeEngine PSSoundIDEV.swift
+[49/128] Compiling PsyScopeEngine PSTobiiIDEV.swift
+[50/128] Compiling PsyScopeEngine PSWhenIDEV.swift
+[51/128] Compiling PsyScopeEngine PSDataLogger.swift
+[52/128] Compiling PsyScopeEngine PSPsyLogWriter.swift
+[53/135] Emitting module PsyScopeEngine
+[54/135] Compiling BuilderTest ScriptWriter.swift
+[55/135] Compiling PsyScopeEngine PSTextureManager.swift
+[56/135] Compiling PsyScopeEngine PSDisplayIDEV.swift
+[57/135] Compiling PsyScopeEngine PSEventBus.swift
+[58/135] Compiling PsyScopeEngine PSInputDevice.swift
+[59/135] Compiling PsyScopeEngine PSKeyIDEV.swift
+[60/135] Compiling PsyScopeEngine PSKeyboardManager.swift
+[61/135] Compiling PsyScopeEngine PSMouseIDEV.swift
+[62/135] Compiling PsyScopeEngine PSMouseManager.swift
+[63/135] Compiling PsyScopeEngine PSActions.swift
+[64/135] Compiling PsyScopeEngine PSSerialManager.swift
+[67/135] Compiling PsyScopeEngine PSConditions.swift
+[68/135] Compiling PsyScopeEngine PSDynamicExpression.swift
+[69/135] Compiling PsyScopeEngine PSErrorHandler.swift
+[70/135] Compiling PsyScopeEngine PSEventLoop.swift
+[71/135] Emitting module BuilderTest
+[74/135] Compiling BuilderTest InspectorViews.swift
+[75/135] Compiling PsyScopeEngine PSImageRenderer.swift
+[76/135] Compiling PsyScopeEngine PSMarkupParser.swift
+[77/135] Compiling PsyScopeEngine PSMetalRenderer.swift
+[78/135] Compiling PsyScopeEngine PSPortManager.swift
+[79/135] Compiling PsyScopeEngine PSPsychophysicsStimuli.swift
+[80/135] Compiling PsyScopeEngine PSShapeRenderer.swift
+[81/135] Compiling PsyScopeEngine PSStimulusGenerator.swift
+[82/135] Compiling PsyScopeEngine PSTextRenderer.swift
+[83/135] Compiling PsyScopeEngine PSMakeFileName.swift
+[84/135] Compiling PsyScopeEngine PSVariableManager.swift
+[85/135] Compiling PsyScopeEngine PSVariableWriteBack.swift
+[86/135] Compiling PsyScopeEngine PSTobiiBridgeClient.swift
+[87/135] Compiling PsyScopeEngine PSTobiiBridgeLauncher.swift
+[88/135] Compiling PsyScopeEngine PSTobiiBridgeProtocol.swift
+[89/135] Compiling PsyScopeEngine PSTobiiCalibration.swift
+[89/135] Write Objects.LinkFileList
+[90/135] Linking BuilderTest
+[91/135] Applying BuilderTest
+[93/135] Compiling PsyScopeEngine PSTobiiCalibrationView.swift
+[94/135] Compiling PsyScopeEngine PSTobiiFixationDetector.swift
+[95/135] Compiling PsyScopeEngine PSTobiiManager.swift
+[96/135] Compiling PsyScopeEngine PSTobiiTopdWriter.swift
+[97/135] Compiling PsyScopeEngine PSTobiiTypes.swift
+[98/135] Compiling PsyScopeEngine PSEngineXPCService.swift
+[99/135] Compiling PsyScopeEngine resource_bundle_accessor.swift
+[100/135] Compiling PsyScopeEngine PSBeepPlayer.swift
+/Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/PSMovieManager.swift:400:70: warning: type 'Any' does not conform to the 'Sendable' protocol
+ 398 |             kCVPixelBufferIOSurfacePropertiesKey as String: [:] as NSDictionary,
+ 399 |         ]
+ 400 |         videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: attrs)
+     |                                                                      `- warning: type 'Any' does not conform to the 'Sendable' protocol
+ 401 |         playerItem.add(videoOutput)
+ 402 | 
+[101/135] Compiling PsyScopeEngine PSMovieDecoder.swift
+/Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/PSMovieManager.swift:400:70: warning: type 'Any' does not conform to the 'Sendable' protocol
+ 398 |             kCVPixelBufferIOSurfacePropertiesKey as String: [:] as NSDictionary,
+ 399 |         ]
+ 400 |         videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: attrs)
+     |                                                                      `- warning: type 'Any' does not conform to the 'Sendable' protocol
+ 401 |         playerItem.add(videoOutput)
+ 402 | 
+[102/135] Compiling PsyScopeEngine PSMovieManager.swift
+/Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/PSMovieManager.swift:400:70: warning: type 'Any' does not conform to the 'Sendable' protocol
+ 398 |             kCVPixelBufferIOSurfacePropertiesKey as String: [:] as NSDictionary,
+ 399 |         ]
+ 400 |         videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: attrs)
+     |                                                                      `- warning: type 'Any' does not conform to the 'Sendable' protocol
+ 401 |         playerItem.add(videoOutput)
+ 402 | 
+[103/135] Compiling PsyScopeEngine PSSoundManager.swift
+/Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/PSMovieManager.swift:400:70: warning: type 'Any' does not conform to the 'Sendable' protocol
+ 398 |             kCVPixelBufferIOSurfacePropertiesKey as String: [:] as NSDictionary,
+ 399 |         ]
+ 400 |         videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: attrs)
+     |                                                                      `- warning: type 'Any' does not conform to the 'Sendable' protocol
+ 401 |         playerItem.add(videoOutput)
+ 402 | 
+[104/135] Compiling PsyScopeEngine PSDataFileWriter.swift
+/Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/PSMovieManager.swift:400:70: warning: type 'Any' does not conform to the 'Sendable' protocol
+ 398 |             kCVPixelBufferIOSurfacePropertiesKey as String: [:] as NSDictionary,
+ 399 |         ]
+ 400 |         videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: attrs)
+     |                                                                      `- warning: type 'Any' does not conform to the 'Sendable' protocol
+ 401 |         playerItem.add(videoOutput)
+ 402 | 
+[105/135] Compiling PsyScopeEngine PSExpressionEvaluator.swift
+/Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/PSMovieManager.swift:400:70: warning: type 'Any' does not conform to the 'Sendable' protocol
+ 398 |             kCVPixelBufferIOSurfacePropertiesKey as String: [:] as NSDictionary,
+ 399 |         ]
+ 400 |         videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: attrs)
+     |                                                                      `- warning: type 'Any' does not conform to the 'Sendable' protocol
+ 401 |         playerItem.add(videoOutput)
+ 402 | 
+[106/135] Compiling PsyScopeEngine PSGetSubjNum.swift
+/Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/PSMovieManager.swift:400:70: warning: type 'Any' does not conform to the 'Sendable' protocol
+ 398 |             kCVPixelBufferIOSurfacePropertiesKey as String: [:] as NSDictionary,
+ 399 |         ]
+ 400 |         videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: attrs)
+     |                                                                      `- warning: type 'Any' does not conform to the 'Sendable' protocol
+ 401 |         playerItem.add(videoOutput)
+ 402 | 
+[107/135] Compiling PsyScopeEngine PSExecutionEngine.swift
+[108/135] Compiling PsyScopeEngine PSPreloadCache.swift
+[109/135] Compiling PsyScopeEngine PSScriptRuntime.swift
+[110/135] Compiling PsyScopeEngine PSTrialEngine.swift
+[111/135] Compiling PsyScopeEngine PSExtensionProtocols.swift
+[112/135] Compiling PsyScopeEngine PSExtensionRegistry.swift
+[113/135] Compiling PsyScopeEngine PSExtensionSettings.swift
+[114/135] Compiling PsyScopeEngine PSFontManager.swift
+[115/156] Emitting module CommTest
+[116/156] Emitting module InputResponseTest
+[117/156] Compiling TrialEngineTest UIHelpers.swift
+[118/157] Compiling TrialEngineTest TrialEngineTestApp.swift
+[119/157] Compiling TrialEngineTest EmbeddedTestScript.swift
+[120/157] Compiling TrialEngineTest InputEventBuffer.swift
+[121/157] Emitting module TrialEngineTest
+[122/157] Emitting module PsyScopeTest
+[123/157] Compiling TrialEngineTest ConsoleTrialDelegate.swift
+[124/157] Compiling RenderingTest RenderingTestApp.swift
+[125/157] Emitting module RenderingTest
+[125/157] Write Objects.LinkFileList
+[127/157] Compiling PsyScopeTest ParserBugFixTests.swift
+[128/157] Compiling PsyScopeTest PsyScopeTestRunner.swift
+[128/157] Write Objects.LinkFileList
+[130/157] Compiling InputResponseTest InputResponseTestApp.swift
+[130/157] Write Objects.LinkFileList
+[132/157] Compiling TobiiTest TobiiTestApp.swift
+[133/157] Emitting module TobiiTest
+[133/157] Write Objects.LinkFileList
+[135/157] Compiling CommTest CommTestApp.swift
+[135/157] Write Objects.LinkFileList
+[136/157] Linking PsyScopeTest
+[137/157] Linking RenderingTest
+[139/157] Compiling ExtensionTest ExtensionTestApp.swift
+[140/157] Emitting module ExtensionTest
+[140/157] Applying PsyScopeTest
+[141/157] Applying RenderingTest
+[142/157] Write Objects.LinkFileList
+[143/157] Linking InputResponseTest
+[144/157] Applying InputResponseTest
+[145/157] Linking TobiiTest
+[146/157] Applying TobiiTest
+[147/157] Linking CommTest
+[148/157] Applying CommTest
+[150/157] Compiling TrialEngineTest VisualTrialDelegate.swift
+[150/157] Linking ExtensionTest
+[151/157] Applying ExtensionTest
+[153/157] Compiling TrialEngineTest MovieAudioManager.swift
+[154/157] Compiling TrialEngineTest TestAppDelegate.swift
+[154/157] Write Objects.LinkFileList
+[155/157] Linking TrialEngineTest
+[156/157] Applying TrialEngineTest
+Build complete! (45.02s)

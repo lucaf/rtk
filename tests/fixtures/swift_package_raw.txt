@@ -1,0 +1,341 @@
+Name: PsyScopeTahoe
+Manifest display name: PsyScopeTahoe
+Path: /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2
+Tools version: 6.2
+Dependencies:
+Platforms:
+    Name: macos
+    Version: 26.0
+
+Products:
+    Name: PsyScopeFramework
+    Type:
+        Library:
+            automatic
+    Targets:
+        PsyScopeFramework
+
+    Name: PsyScopeEngine
+    Type:
+        Library:
+            automatic
+    Targets:
+        PsyScopeEngine
+
+    Name: PsyScopeTest
+    Type:
+        Executable: nil
+    Targets:
+        PsyScopeTest
+
+    Name: RenderingTest
+    Type:
+        Executable: nil
+    Targets:
+        RenderingTest
+
+    Name: InputResponseTest
+    Type:
+        Executable: nil
+    Targets:
+        InputResponseTest
+
+    Name: ExtensionTest
+    Type:
+        Executable: nil
+    Targets:
+        ExtensionTest
+
+    Name: CommTest
+    Type:
+        Executable: nil
+    Targets:
+        CommTest
+
+    Name: TobiiTest
+    Type:
+        Executable: nil
+    Targets:
+        TobiiTest
+
+    Name: TrialEngineTest
+    Type:
+        Executable: nil
+    Targets:
+        TrialEngineTest
+
+    Name: PortEditor
+    Type:
+        Executable: nil
+    Targets:
+        PortEditor
+
+    Name: BuilderTest
+    Type:
+        Executable: nil
+    Targets:
+        BuilderTest
+
+Targets:
+    Name: TrialEngineTest
+    Type: executable
+    C99name: TrialEngineTest
+    Module type: SwiftTarget
+    Path: TrialEngineTest
+    Sources:
+        ConsoleTrialDelegate.swift
+        EmbeddedTestScript.swift
+        InputEventBuffer.swift
+        MovieAudioManager.swift
+        TestAppDelegate.swift
+        TrialEngineTestApp.swift
+        UIHelpers.swift
+        VisualTrialDelegate.swift
+    Target dependencies:
+        PsyScopeFramework
+        PsyScopeEngine
+    Product memberships:
+        TrialEngineTest
+
+    Name: TobiiTest
+    Type: executable
+    C99name: TobiiTest
+    Module type: SwiftTarget
+    Path: TobiiTest
+    Sources:
+        TobiiTestApp.swift
+    Target dependencies:
+        PsyScopeFramework
+        PsyScopeEngine
+    Product memberships:
+        TobiiTest
+
+    Name: RenderingTest
+    Type: executable
+    C99name: RenderingTest
+    Module type: SwiftTarget
+    Path: RenderingTest
+    Sources:
+        RenderingTestApp.swift
+    Target dependencies:
+        PsyScopeFramework
+        PsyScopeEngine
+    Product memberships:
+        RenderingTest
+
+    Name: PsyScopeTest
+    Type: executable
+    C99name: PsyScopeTest
+    Module type: SwiftTarget
+    Path: PsyScopeTest
+    Sources:
+        ParserBugFixTests.swift
+        PsyScopeTestRunner.swift
+    Target dependencies:
+        PsyScopeFramework
+        PsyScopeEngine
+    Product memberships:
+        PsyScopeTest
+
+    Name: PsyScopeFramework
+    Type: library
+    C99name: PsyScopeFramework
+    Module type: SwiftTarget
+    Path: PsyScopeFramework
+    Sources:
+        Generation/PSScriptWriter.swift
+        PSLogging.swift
+        PSScriptLoader.swift
+        PSTypes.swift
+        Parsing/PSASTConverter.swift
+        Parsing/PSScriptAST.swift
+        Parsing/PSScriptGrammar.swift
+        Parsing/PSScriptParser.swift
+        Parsing/PSTokenizer.swift
+    Product memberships:
+        PsyScopeFramework
+        PsyScopeEngine
+        PsyScopeTest
+        RenderingTest
+        InputResponseTest
+        ExtensionTest
+        CommTest
+        TobiiTest
+        TrialEngineTest
+        BuilderTest
+
+    Name: PsyScopeEngine
+    Type: library
+    C99name: PsyScopeEngine
+    Module type: SwiftTarget
+    Path: PsyScopeEngine
+    Sources:
+        Actions/PSActions.swift
+        Communication/PSSerialManager.swift
+        Communication/PSTCPManager.swift
+        Communication/PSUnixCommandManager.swift
+        Conditions/PSConditions.swift
+        Execution/PSDynamicExpression.swift
+        Execution/PSErrorHandler.swift
+        Execution/PSEventLoop.swift
+        Execution/PSExecutionEngine.swift
+        Execution/PSPreloadCache.swift
+        Execution/PSScriptRuntime.swift
+        Execution/PSTrialEngine.swift
+        Extensions/PSExtensionProtocols.swift
+        Extensions/PSExtensionRegistry.swift
+        Extensions/PSExtensionSettings.swift
+        Graphics/PSFontManager.swift
+        Graphics/PSImageRenderer.swift
+        Graphics/PSMarkupParser.swift
+        Graphics/PSMetalRenderer.swift
+        Graphics/PSPortManager.swift
+        Graphics/PSPsychophysicsStimuli.swift
+        Graphics/PSShapeRenderer.swift
+        Graphics/PSStimulusGenerator.swift
+        Graphics/PSTextRenderer.swift
+        Graphics/PSTextureManager.swift
+        Input/PSDisplayIDEV.swift
+        Input/PSEventBus.swift
+        Input/PSInputDevice.swift
+        Input/PSKeyIDEV.swift
+        Input/PSKeyboardManager.swift
+        Input/PSMouseIDEV.swift
+        Input/PSMouseManager.swift
+        Input/PSMovieIDEV.swift
+        Input/PSResponseCollector.swift
+        Input/PSSerialIDEV.swift
+        Input/PSSoundIDEV.swift
+        Input/PSTobiiIDEV.swift
+        Input/PSWhenIDEV.swift
+        Logging/PSDataLogger.swift
+        Logging/PSPsyLogWriter.swift
+        Media/PSBeepPlayer.swift
+        Media/PSMovieDecoder.swift
+        Media/PSMovieManager.swift
+        Media/PSSoundManager.swift
+        Runtime/PSDataFileWriter.swift
+        Runtime/PSExpressionEvaluator.swift
+        Runtime/PSGetSubjNum.swift
+        Runtime/PSMakeFileName.swift
+        Runtime/PSVariableManager.swift
+        Runtime/PSVariableWriteBack.swift
+        Tobii/PSTobiiBridgeClient.swift
+        Tobii/PSTobiiBridgeLauncher.swift
+        Tobii/PSTobiiBridgeProtocol.swift
+        Tobii/PSTobiiCalibration.swift
+        Tobii/PSTobiiCalibrationView.swift
+        Tobii/PSTobiiFixationDetector.swift
+        Tobii/PSTobiiManager.swift
+        Tobii/PSTobiiTopdWriter.swift
+        Tobii/PSTobiiTypes.swift
+        XPC/PSEngineXPCService.swift
+    Resources:
+        Rule:
+            Process:
+        Path:
+            /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Graphics/Shaders.metal
+        Rule:
+            Copy:
+        Path:
+            /Users/luca/Desktop/_Bonattos/PsyScopeTahoe_EventBased_2/PsyScopeEngine/Media/BeepSounds
+    Target dependencies:
+        PsyScopeFramework
+        CTobiiResearch
+    Product memberships:
+        PsyScopeEngine
+        PsyScopeTest
+        RenderingTest
+        InputResponseTest
+        ExtensionTest
+        CommTest
+        TobiiTest
+        TrialEngineTest
+
+    Name: PortEditor
+    Type: executable
+    C99name: PortEditor
+    Module type: SwiftTarget
+    Path: PortEditor
+    Sources:
+        PortEditorApp.swift
+    Product memberships:
+        PortEditor
+
+    Name: InputResponseTest
+    Type: executable
+    C99name: InputResponseTest
+    Module type: SwiftTarget
+    Path: InputResponseTest
+    Sources:
+        InputResponseTestApp.swift
+    Target dependencies:
+        PsyScopeFramework
+        PsyScopeEngine
+    Product memberships:
+        InputResponseTest
+
+    Name: ExtensionTest
+    Type: executable
+    C99name: ExtensionTest
+    Module type: SwiftTarget
+    Path: ExtensionTest
+    Sources:
+        ExtensionTestApp.swift
+    Target dependencies:
+        PsyScopeFramework
+        PsyScopeEngine
+    Product memberships:
+        ExtensionTest
+
+    Name: CommTest
+    Type: executable
+    C99name: CommTest
+    Module type: SwiftTarget
+    Path: CommTest
+    Sources:
+        CommTestApp.swift
+    Target dependencies:
+        PsyScopeFramework
+        PsyScopeEngine
+    Product memberships:
+        CommTest
+
+    Name: CTobiiResearch
+    Type: system-target
+    C99name: CTobiiResearch
+    Module type: SystemLibraryTarget
+    Path: CTobiiResearch
+    Sources:
+    Product memberships:
+        PsyScopeEngine
+        PsyScopeTest
+        RenderingTest
+        InputResponseTest
+        ExtensionTest
+        CommTest
+        TobiiTest
+        TrialEngineTest
+
+    Name: BuilderTest
+    Type: executable
+    C99name: BuilderTest
+    Module type: SwiftTarget
+    Path: BuilderTest
+    Sources:
+        BoardViews.swift
+        BuilderAppDelegate.swift
+        BuilderModel.swift
+        BuilderTestApp.swift
+        DetailPanels.swift
+        EventViews.swift
+        InputDevicesPanel.swift
+        InspectorViews.swift
+        PortCanvas.swift
+        ScriptWriter.swift
+    Target dependencies:
+        PsyScopeFramework
+    Product memberships:
+        BuilderTest
+
+

@@ -1,0 +1,30 @@
+Starting recording with the Time Profiler template.
+Tracing process: SimpleHTTPServer [pid: 12345]
+Recording...
+Output file saved as: /Users/luca/Desktop/SimpleHTTPServer_2026-04-12_143022.trace
+Recording completed. Duration: 30.12 seconds.
+
+Target: SimpleHTTPServer [pid: 12345]
+Template: Time Profiler
+Duration: 30.12 seconds
+Trace file: /Users/luca/Desktop/SimpleHTTPServer_2026-04-12_143022.trace
+Trace file size: 48.3 MB
+
+Instruments summary:
+  Time Profiler:
+    Samples: 15,234
+    Heaviest stack trace:
+      30.2%  SimpleHTTPServer
+      18.4%  libswiftCore.dylib
+      12.7%  libsystem_pthread.dylib
+       8.1%  libnetwork.dylib
+       5.3%  libdispatch.dylib
+    Threads sampled: 8
+    CPU utilization: 67.2% (avg), 98.1% (peak)
+
+  Points of Interest:
+    os_signpost regions: 142
+    Hitch-free render rate: 97.3%
+
+Run complete. Trace saved to: /Users/luca/Desktop/SimpleHTTPServer_2026-04-12_143022.trace
+To view, open the trace file in Instruments.app or use `xctrace export`.

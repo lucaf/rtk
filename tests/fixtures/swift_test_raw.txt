@@ -1,0 +1,294 @@
+[0/1] Planning build
+Test Suite 'All tests' started at 2026-04-12 13:15:22.262.
+Test Suite 'All tests' passed at 2026-04-12 13:15:22.265.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.003) seconds
+◇ Test run started.
+↳ Testing Library Version: 1743
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "PSExpressionEvaluator" started.
+◇ Suite "PSTokenizer" started.
+◇ Suite "PSExpressionEvaluator edge cases (known failures)" started.
+◇ Suite "PSVariableManager" started.
+◇ Suite "PSVariableValue edge cases (known failures)" started.
+◇ Suite "Type initialization defaults" started.
+◇ Suite "PSScriptWriter round-trip" started.
+◇ Suite "PSScriptLoader" started.
+◇ Suite "PSVariableValue" started.
+◇ Suite "PSAttribute" started.
+◇ Suite "PSScriptParser edge cases (known failures)" started.
+◇ Suite "PSVariableManager edge cases (known failures)" started.
+◇ Suite "PSTimingPrecision" started.
+◇ Suite "PSVariableScope" started.
+◇ Suite "PSColor.parse" started.
+◇ Suite "PSScriptParser" started.
+◇ Suite "PSColor properties" started.
+◇ Suite "PSValueTokenizer" started.
+◇ Suite "PSKeyModifiers" started.
+◇ Suite "PSExperimentSettings" started.
+◇ Test "Tokenize simple script" started.
+◇ Suite "PSColor.parse edge cases (known failures)" started.
+◇ Test "Tokenize quoted entry names" started.
+◇ Test "Modulo operator %" started.
+◇ Test "Integer division operator //" started.
+◇ Test "String comparison: equality" started.
+◇ Test "Undefined variable in expression returns empty" started.
+◇ Suite "PSScriptWriter edge cases (known failures)" started.
+◇ Test "Boolean logic: AND / OR" started.
+◇ Test "Strcat function" started.
+◇ Test "Nested parentheses: (3 + (4 * 2))" started.
+◇ Test "Variable scope: push and pop" started.
+◇ Test "Negative number as first token: -5+3" started.
+◇ Test "Variable types" started.
+◇ Test "Get nonexistent variable returns nil" started.
+◇ Test "Snapshot captures variable state" started.
+◇ Test "Large integer multiplication promotes to float" started.
+◇ Test "Set and get variable" started.
+◇ Test "String with whitespace intValue is nil" started.
+◇ Test "Float precision in string representation" started.
+◇ Test "Inner scope shadows outer variable" started.
+◇ Test "Operator precedence: * before +" started.
+◇ Test "PSList defaults" started.
+◇ Test "Trial context sets auto-variables" started.
+◇ Test "Division by zero in expression" started.
+◇ Test "isValid returns false for invalid script" started.
+◇ Test "Round-trip preserves entries" started.
+◇ Test "PSEvent defaults" started.
+◇ Test "Load valid script" started.
+◇ Test "PSPort defaults" started.
+◇ Test "Generate template produces valid script" started.
+◇ Test "PSExperiment defaults" started.
+◇ Test "List string representation" started.
+◇ Test "Float addition" started.
+◇ Test "PSDisplaySettings defaults" started.
+◇ Test "Load invalid script (no experiment)" started.
+◇ Test "isValid returns true for valid script" started.
+◇ Test "Division by zero returns empty string" started.
+◇ Test "Float conversion" started.
+◇ Test "Division produces float" started.
+◇ Test "String concatenation on non-numeric add" started.
+◇ Test "Mixed addition promotes to float" started.
+◇ Test "Integer addition" started.
+◇ Test "Bool conversion" started.
+◇ Test "Basic arithmetic: division" started.
+◇ Test "Integer multiplication" started.
+◇ Test "Variable substitution" started.
+◇ Test "String representation" started.
+◇ Test "Int conversion" started.
+◇ Test "String value accessor" started.
+◇ Test "Entry content resolution" started.
+◇ Test "Empty string intValue is nil" started.
+◇ Test "Built-in function: Max" started.
+◇ Test "Integer subtraction" started.
+◇ Test "Built-in function: Min" started.
+◇ Test "Built-in function: Abs" started.
+◇ Test "Double value accessor" started.
+◇ Test "Int value accessor" started.
+◇ Test "Basic arithmetic: multiplication" started.
+◇ Test "Basic arithmetic: subtraction" started.
+◇ Test "Chained entry content resolution" started.
+◇ Test "Variable in expression" started.
+◇ Test "Overwrite variable changes type" started.
+◇ Test "Subject variables persist across scopes" started.
+◇ Test "Basic arithmetic: addition" started.
+◇ Test "Default initialization" started.
+◇ Test "Case-insensitive variable lookup" started.
+◇ Test "With initial variables" started.
+◇ Test "Timebase multipliers" started.
+◇ Test "Variable reference returns nil" started.
+◇ Test "Hex colors" started.
+◇ Test "8-bit RGBA" started.
+◇ Test "16-bit PsyScope X color" started.
+◇ Test "Deeply nested scopes" started.
+◇ Test "Device switch extraction" started.
+◇ Test "Floating-point RGB" started.
+◇ Test "16-bit negative wrapping" started.
+◇ Test "Single integer grayscale fallback" started.
+◇ Test "8-bit RGB" started.
+◇ Test "Port detection via PortNames" started.
+◇ Test "Quoted multi-word references" started.
+◇ Test "AST entry lookup" started.
+◇ Test "Templates-only (no groups/blocks)" started.
+◇ Test "Named colors" started.
+◇ Test "Full parse to PSExperiment" started.
+◇ Test "Empty string returns nil" started.
+◇ Test "Reference list tokenization" started.
+◇ Test "Function call as single token" started.
+◇ Test "AST attribute extraction" started.
+◇ Test "Simple word tokens" started.
+◇ Test "Option set operations" started.
+◇ Test "Empty string returns no tokens" started.
+◇ Test "Bracket expression as single token" started.
+◇ Test "Quoted strings stripped" started.
+◇ Test "Comma-separated values" started.
+◇ Test "Groups-Blocks-Templates hierarchy" started.
+◇ Test "Quoted strings preserved as single token" started.
+◇ Test "Parse to AST" started.
+◇ Test "Static color constants" started.
+◇ Test "Metal float4 tuple" started.
+✘ Test "Undefined variable in expression returns empty" recorded an issue at PsyScopeEngineTests.swift:479:9: Expectation failed: isReasonable
+↳ Undefined variable in expression should degrade gracefully, got: @undefined_var5
+✘ Test "String with whitespace intValue is nil" recorded an issue at PsyScopeEngineTests.swift:540:9: Expectation failed: (parsed → nil) == 42
+↳ String '  42  ' should parse to 42 after trimming whitespace
+  [experimentEntry] No 'Experiments' entry found!
+  [experimentEntry] No 'Experiments' entry found!
+◇ Test "Device switch: absent defaults to enabled" started.
+◇ Test "Default values" started.
+◇ Test "Device switch: case insensitive" started.
+◇ Test "Device switch: explicit off" started.
+◇ Test "Duplicate entry names produce warning" started.
+◇ Test "Missing event entry produces error" started.
+◇ Test "Empty experiment name" started.
+◇ Test "Unicode entry names" started.
+◇ Test "Very long attribute value" started.
+◇ Test "Negative 8-bit clamping: '-10 0 0'" started.
+◇ Test "Tab-separated RGB: '255\t128\t0'" started.
+◇ Test "Comma-separated RGB: '255,128,0'" started.
+◇ Test "Hex 4-digit: '#F00F' (RGBA short form)" started.
+◇ Test "Round-trip preserves PortNames ordering" started.
+✔ Test "String comparison: equality" passed after 0.007 seconds.
+✔ Test "Boolean logic: AND / OR" passed after 0.007 seconds.
+✔ Test "Modulo operator %" passed after 0.007 seconds.
+✔ Test "Nested parentheses: (3 + (4 * 2))" passed after 0.007 seconds.
+✔ Test "Integer division operator //" passed after 0.007 seconds.
+✔ Test "Variable scope: push and pop" passed after 0.007 seconds.
+✔ Test "Negative number as first token: -5+3" passed after 0.007 seconds.
+✘ Test "Undefined variable in expression returns empty" failed after 0.007 seconds with 1 issue.
+✔ Test "Strcat function" passed after 0.007 seconds.
+✔ Test "Snapshot captures variable state" passed after 0.007 seconds.
+✔ Test "Large integer multiplication promotes to float" passed after 0.007 seconds.
+✔ Test "Get nonexistent variable returns nil" passed after 0.007 seconds.
+✔ Test "Inner scope shadows outer variable" passed after 0.007 seconds.
+✔ Test "Variable types" passed after 0.007 seconds.
+✔ Test "Operator precedence: * before +" passed after 0.007 seconds.
+✔ Test "Float precision in string representation" passed after 0.007 seconds.
+✔ Test "Division by zero in expression" passed after 0.007 seconds.
+✔ Test "PSList defaults" passed after 0.007 seconds.
+✔ Test "Set and get variable" passed after 0.007 seconds.
+✔ Test "Trial context sets auto-variables" passed after 0.007 seconds.
+✔ Test "PSEvent defaults" passed after 0.007 seconds.
+✔ Test "PSPort defaults" passed after 0.007 seconds.
+✔ Test "List string representation" passed after 0.007 seconds.
+✔ Test "Float addition" passed after 0.007 seconds.
+✘ Test "String with whitespace intValue is nil" failed after 0.007 seconds with 1 issue.
+✔ Test "PSDisplaySettings defaults" passed after 0.007 seconds.
+✔ Test "Tokenize quoted entry names" passed after 0.007 seconds.
+✔ Test "Tokenize simple script" passed after 0.007 seconds.
+✔ Test "isValid returns false for invalid script" passed after 0.007 seconds.
+✔ Test "Division by zero returns empty string" passed after 0.007 seconds.
+✔ Test "Division produces float" passed after 0.007 seconds.
+✔ Test "String concatenation on non-numeric add" passed after 0.007 seconds.
+✔ Test "Bool conversion" passed after 0.007 seconds.
+✔ Test "PSExperiment defaults" passed after 0.007 seconds.
+✔ Test "Basic arithmetic: division" passed after 0.007 seconds.
+✔ Test "Integer multiplication" passed after 0.007 seconds.
+✔ Test "Load invalid script (no experiment)" passed after 0.007 seconds.
+✔ Test "Load valid script" passed after 0.007 seconds.
+✔ Test "String representation" passed after 0.007 seconds.
+✔ Test "String value accessor" passed after 0.007 seconds.
+✔ Test "Entry content resolution" passed after 0.007 seconds.
+✔ Test "Mixed addition promotes to float" passed after 0.007 seconds.
+✔ Test "Integer addition" passed after 0.007 seconds.
+✔ Test "Float conversion" passed after 0.007 seconds.
+✔ Test "Generate template produces valid script" passed after 0.007 seconds.
+✔ Test "Int conversion" passed after 0.007 seconds.
+✔ Test "Integer subtraction" passed after 0.007 seconds.
+✔ Test "isValid returns true for valid script" passed after 0.007 seconds.
+✔ Test "Empty string intValue is nil" passed after 0.007 seconds.
+✔ Test "Int value accessor" passed after 0.007 seconds.
+✔ Test "Basic arithmetic: multiplication" passed after 0.007 seconds.
+✔ Test "Basic arithmetic: subtraction" passed after 0.007 seconds.
+✔ Test "Overwrite variable changes type" passed after 0.007 seconds.
+✔ Test "Variable in expression" passed after 0.007 seconds.
+✔ Test "Subject variables persist across scopes" passed after 0.007 seconds.
+✔ Test "Double value accessor" passed after 0.007 seconds.
+✔ Test "Variable substitution" passed after 0.007 seconds.
+✔ Test "Round-trip preserves entries" passed after 0.007 seconds.
+✔ Test "Case-insensitive variable lookup" passed after 0.007 seconds.
+✔ Test "With initial variables" passed after 0.007 seconds.
+✔ Test "Variable reference returns nil" passed after 0.007 seconds.
+✔ Test "16-bit PsyScope X color" passed after 0.007 seconds.
+✔ Test "Timebase multipliers" passed after 0.007 seconds.
+✔ Test "8-bit RGBA" passed after 0.007 seconds.
+✔ Test "Built-in function: Max" passed after 0.007 seconds.
+✔ Test "Hex colors" passed after 0.007 seconds.
+✔ Test "Basic arithmetic: addition" passed after 0.007 seconds.
+✔ Test "Built-in function: Abs" passed after 0.007 seconds.
+✔ Test "16-bit negative wrapping" passed after 0.007 seconds.
+✔ Test "8-bit RGB" passed after 0.007 seconds.
+✔ Test "Default initialization" passed after 0.007 seconds.
+✔ Test "Device switch extraction" passed after 0.007 seconds.
+✔ Test "Chained entry content resolution" passed after 0.007 seconds.
+✔ Test "Named colors" passed after 0.007 seconds.
+✔ Test "Quoted multi-word references" passed after 0.007 seconds.
+✔ Test "Empty string returns nil" passed after 0.007 seconds.
+✔ Test "Function call as single token" passed after 0.007 seconds.
+✔ Test "AST entry lookup" passed after 0.007 seconds.
+✔ Test "Templates-only (no groups/blocks)" passed after 0.007 seconds.
+✔ Test "Reference list tokenization" passed after 0.007 seconds.
+✔ Test "Simple word tokens" passed after 0.007 seconds.
+✔ Test "Floating-point RGB" passed after 0.007 seconds.
+✔ Test "Option set operations" passed after 0.007 seconds.
+✔ Test "Full parse to PSExperiment" passed after 0.007 seconds.
+✔ Test "Single integer grayscale fallback" passed after 0.007 seconds.
+✘ Test "Duplicate entry names produce warning" recorded an issue at PsyScopeFrameworkTests.swift:779:9: Expectation failed: hasDuplicateWarning
+↳ Duplicate entry names should produce a warning or error
+✔ Test "Comma-separated values" passed after 0.007 seconds.
+✔ Test "Deeply nested scopes" passed after 0.007 seconds.
+✔ Test "Quoted strings preserved as single token" passed after 0.007 seconds.
+✔ Test "AST attribute extraction" passed after 0.007 seconds.
+✘ Test "Missing event entry produces error" recorded an issue at PsyScopeFrameworkTests.swift:801:9: Expectation failed: hasMissingWarning
+↳ Reference to nonexistent event should produce a warning
+✔ Test "Static color constants" passed after 0.007 seconds.
+  [experimentEntry] All resolution methods failed
+✔ Test "Groups-Blocks-Templates hierarchy" passed after 0.007 seconds.
+✔ Test "Empty string returns no tokens" passed after 0.007 seconds.
+✔ Test "Parse to AST" passed after 0.007 seconds.
+✔ Test "Built-in function: Min" passed after 0.008 seconds.
+✔ Test "Quoted strings stripped" passed after 0.008 seconds.
+✔ Test "Port detection via PortNames" passed after 0.008 seconds.
+✔ Test "Bracket expression as single token" passed after 0.008 seconds.
+✔ Test "Device switch: absent defaults to enabled" passed after 0.003 seconds.
+✔ Test "Default values" passed after 0.003 seconds.
+✔ Test "Device switch: case insensitive" passed after 0.003 seconds.
+✔ Test "Metal float4 tuple" passed after 0.007 seconds.
+✔ Test "Empty experiment name" passed after 0.002 seconds.
+✘ Test "Duplicate entry names produce warning" failed after 0.002 seconds with 1 issue.
+✔ Test "Device switch: explicit off" passed after 0.003 seconds.
+✔ Test "Comma-separated RGB: '255,128,0'" passed after 0.001 seconds.
+✘ Test "Missing event entry produces error" failed after 0.002 seconds with 1 issue.
+✔ Test "Tab-separated RGB: '255\t128\t0'" passed after 0.002 seconds.
+✘ Suite "PSVariableValue edge cases (known failures)" failed after 0.009 seconds with 1 issue.
+✔ Suite "PSVariableManager" passed after 0.009 seconds.
+✘ Test "Hex 4-digit: '#F00F' (RGBA short form)" recorded an issue at PsyScopeFrameworkTests.swift:705:9: Expectation failed: (c → nil) != nil
+↳ 4-digit hex (#RGBA short form) should parse
+✔ Suite "Type initialization defaults" passed after 0.009 seconds.
+✘ Suite "PSExpressionEvaluator edge cases (known failures)" failed after 0.009 seconds with 1 issue.
+✔ Suite "PSVariableValue" passed after 0.009 seconds.
+✔ Suite "PSAttribute" passed after 0.009 seconds.
+✔ Test "Unicode entry names" passed after 0.002 seconds.
+✔ Suite "PSExpressionEvaluator" passed after 0.009 seconds.
+✔ Suite "PSScriptLoader" passed after 0.009 seconds.
+✔ Suite "PSVariableManager edge cases (known failures)" passed after 0.009 seconds.
+✔ Suite "PSTokenizer" passed after 0.009 seconds.
+✔ Suite "PSVariableScope" passed after 0.009 seconds.
+✔ Suite "PSScriptWriter round-trip" passed after 0.009 seconds.
+✔ Suite "PSKeyModifiers" passed after 0.009 seconds.
+✔ Suite "PSTimingPrecision" passed after 0.009 seconds.
+✔ Suite "PSColor.parse" passed after 0.009 seconds.
+✔ Suite "PSColor properties" passed after 0.009 seconds.
+✘ Test "Hex 4-digit: '#F00F' (RGBA short form)" failed after 0.002 seconds with 1 issue.
+✔ Suite "PSExperimentSettings" passed after 0.009 seconds.
+  [experimentEntry] All resolution methods failed
+✔ Suite "PSScriptParser" passed after 0.009 seconds.
+✔ Suite "PSValueTokenizer" passed after 0.009 seconds.
+✘ Test "Negative 8-bit clamping: '-10 0 0'" recorded an issue at PsyScopeFrameworkTests.swift:731:9: Expectation failed: (c!.red → 0.9998626688029297) < 0.01
+↳ // A "correct" 8-bit parser would clamp -10 to 0
+↳ Small negative values in 8-bit range should clamp to 0, not wrap to 16-bit
+✘ Test "Negative 8-bit clamping: '-10 0 0'" failed after 0.002 seconds with 1 issue.
+✘ Suite "PSColor.parse edge cases (known failures)" failed after 0.010 seconds with 2 issues.
+✘ Test "Round-trip preserves PortNames ordering" recorded an issue at PsyScopeFrameworkTests.swift:859:6: Caught error: .noExperiment
+✘ Test "Round-trip preserves PortNames ordering" failed after 0.003 seconds with 1 issue.
+✘ Suite "PSScriptWriter edge cases (known failures)" failed after 0.010 seconds with 1 issue.
+✔ Test "Very long attribute value" passed after 0.008 seconds.
+✘ Suite "PSScriptParser edge cases (known failures)" failed after 0.016 seconds with 2 issues.
+✘ Test run with 112 tests in 22 suites failed after 0.016 seconds with 7 issues.

@@ -1,0 +1,32 @@
+== Devices ==
+Luca's MacBook Air (C6A93794-F039-555A-A9E6-40FC28901A81)
+    OS: macOS 15.4
+    Model: Mac14,2
+    Disk Space: 245.11 GB / 494.38 GB
+
+Luca's iPhone (A1B2C3D4-E5F6-7A8B-9C0D-1E2F3A4B5C6D)
+    OS: iOS 18.4
+    Model: iPhone 14
+    Disk Space: 52.30 GB / 128.00 GB
+
+== Simulators ==
+iPhone 15 (4A72B2E1-CF3F-4C3E-A3E2-7B4D6E8F9A1B)
+    OS: iOS 18.0
+
+iPhone 15 Pro (D8E3F4A5-6B7C-8D9E-0F1A-2B3C4D5E6F7A)
+    OS: iOS 18.0
+
+iPhone 16 Pro Max (1B2C3D4E-5F6A-7B8C-9D0E-1F2A3B4C5D6E)
+    OS: iOS 18.0
+
+iPad Air (5th generation) (A1B2C3D4-E5F6-7A8B-9C0D-1E2F3A4B5C6E)
+    OS: iPadOS 18.0
+
+iPad Pro 13-inch (M4) (B2C3D4E5-F6A7-8B9C-0D1E-2F3A4B5C6D7E)
+    OS: iPadOS 18.0
+
+Apple Watch Ultra 2 (49mm) (C3D4E5F6-A7B8-9C0D-1E2F-3A4B5C6D7E8F)
+    OS: watchOS 11.0
+
+Apple TV 4K (3rd generation) (D4E5F6A7-B8C9-0D1E-2F3A-4B5C6D7E8F9A)
+    OS: tvOS 18.0

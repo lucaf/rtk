@@ -1,0 +1,28 @@
+[0/1] Planning build
+Building for debugging...
+[0/19] Write swift-version--58304C5D6DBC2206.txt
+[1/19] Compiling PsyScopeFramework PSColor.swift
+[2/19] Compiling PsyScopeFramework PSVariableValue.swift
+[3/19] Compiling PsyScopeFramework PSExperiment.swift
+[4/19] Compiling PsyScopeFramework PSScriptParser.swift
+[5/19] Compiling PsyScopeFramework PSTokenizer.swift
+[6/19] Compiling PsyScopeFramework PSScriptWriter.swift
+[7/19] Compiling PsyScopeFramework PSExpressionEvaluator.swift
+[8/19] Compiling PsyScopeFramework PSVariableManager.swift
+[9/19] Compiling PsyScopeFramework PSScriptLoader.swift
+[10/19] Compiling PsyScopeEngine TrialEngine.swift
+[11/19] Compiling PsyScopeEngine EventDispatcher.swift
+[12/19] Compiling PsyScopeEngine RenderingPipeline.swift
+[13/19] Compiling PsyScopeEngine InputHandler.swift
+[14/19] Compiling PsyScopeTest main.swift
+[15/19] Linking PsyScopeFramework
+[16/19] Linking PsyScopeEngine
+[17/19] Linking PsyScopeTest
+[18/19] Build complete! (3.42s)
+Build of product 'PsyScopeTest' complete! (3.42s)
+PsyScope Tahoe — Test Runner
+═══════════════════════════════════════════════════
+  ✅ Tokenizer produces tokens
+  ✅ Parser generates AST
+  ✅ Experiment loads correctly
+Done. 3 checks passed.

@@ -7,6 +7,7 @@ mod learn;
 mod parser;
 
 // Re-export command modules for routing
+use cmds::apple::{simctl_cmd, swift_cmd, swiftlint_cmd, xcodebuild_cmd, xctrace_cmd};
 use cmds::cloud::{aws_cmd, container, curl_cmd, psql_cmd, wget_cmd};
 use cmds::dotnet::{binlog, dotnet_cmd, dotnet_format_report, dotnet_trx};
 use cmds::git::{diff_cmd, gh_cmd, git, gt_cmd};
@@ -490,6 +491,41 @@ enum Commands {
     Cargo {
         #[command(subcommand)]
         command: CargoCommands,
+    },
+
+    /// Swift commands with compact output (build/test/package)
+    Swift {
+        #[command(subcommand)]
+        command: SwiftCommands,
+    },
+
+    /// Xcodebuild with compact output (strips compiler invocations, keeps errors/status)
+    Xcodebuild {
+        /// Xcodebuild arguments (e.g., build, test, -scheme, -configuration)
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+
+    /// SwiftLint with violations grouped by rule
+    #[command(name = "swiftlint")]
+    SwiftLint {
+        /// SwiftLint arguments (e.g., lint, autocorrect, --strict)
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+
+    /// iOS/tvOS/watchOS Simulator management with compact output (xcrun simctl)
+    Simctl {
+        /// simctl arguments (e.g., list, boot, shutdown, delete)
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+
+    /// Xcode Instruments profiling with compact output (xcrun xctrace)
+    Xctrace {
+        /// xctrace arguments (e.g., list templates, list devices, record)
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
     },
 
     /// npm run with filtered output (strip boilerplate)
@@ -977,6 +1013,37 @@ enum CargoCommands {
         args: Vec<String>,
     },
     /// Passthrough: runs any unsupported cargo subcommand directly
+    #[command(external_subcommand)]
+    Other(Vec<OsString>),
+}
+
+#[derive(Subcommand)]
+enum SwiftCommands {
+    /// Build with compact output (strip compilation lines, keep errors)
+    Build {
+        /// Additional swift build arguments
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+    /// Test with failures-only output
+    Test {
+        /// Additional swift test arguments
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+    /// Package description with compact output
+    Package {
+        /// Additional swift package arguments (e.g., describe, resolve, update)
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+    /// Run with build noise stripped (keeps only program output)
+    Run {
+        /// Additional swift run arguments (e.g., target name, --)
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+    /// Passthrough: runs any unsupported swift subcommand directly
     #[command(external_subcommand)]
     Other(Vec<OsString>),
 }
@@ -1795,6 +1862,30 @@ fn run_cli() -> Result<i32> {
             CargoCommands::Other(args) => cargo_cmd::run_passthrough(&args, cli.verbose)?,
         },
 
+        Commands::Swift { command } => match command {
+            SwiftCommands::Build { args } => {
+                swift_cmd::run(swift_cmd::SwiftCommand::Build, &args, cli.verbose)?
+            }
+            SwiftCommands::Test { args } => {
+                swift_cmd::run(swift_cmd::SwiftCommand::Test, &args, cli.verbose)?
+            }
+            SwiftCommands::Package { args } => {
+                swift_cmd::run(swift_cmd::SwiftCommand::Package, &args, cli.verbose)?
+            }
+            SwiftCommands::Run { args } => {
+                swift_cmd::run(swift_cmd::SwiftCommand::Run, &args, cli.verbose)?
+            }
+            SwiftCommands::Other(args) => swift_cmd::run_passthrough(&args, cli.verbose)?,
+        },
+
+        Commands::Xcodebuild { args } => xcodebuild_cmd::run(&args, cli.verbose)?,
+
+        Commands::SwiftLint { args } => swiftlint_cmd::run(&args, cli.verbose)?,
+
+        Commands::Simctl { args } => simctl_cmd::run(&args, cli.verbose)?,
+
+        Commands::Xctrace { args } => xctrace_cmd::run(&args, cli.verbose)?,
+
         Commands::Npm { args } => npm_cmd::run(&args, cli.verbose, cli.skip_env)?,
 
         Commands::Curl { args } => curl_cmd::run(&args, cli.verbose)?,
@@ -2192,6 +2283,11 @@ fn is_operational_command(cmd: &Commands) -> bool {
             | Commands::Prettier { .. }
             | Commands::Playwright { .. }
             | Commands::Cargo { .. }
+            | Commands::Swift { .. }
+            | Commands::Xcodebuild { .. }
+            | Commands::SwiftLint { .. }
+            | Commands::Simctl { .. }
+            | Commands::Xctrace { .. }
             | Commands::Npm { .. }
             | Commands::Npx { .. }
             | Commands::Curl { .. }

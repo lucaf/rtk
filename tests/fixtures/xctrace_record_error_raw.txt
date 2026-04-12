@@ -1,0 +1,8 @@
+Starting recording with the Time Profiler template. Attaching to: sleep (36937). Time limit: 3.0 s
+Ctrl-C to stop the recording
+Reached specified time limit, ending recording...
+Run issues were detected (trace is still ready to be viewed):
+* [Error] Failed to stop recording session: Failed stoping ktrace session. 
+
+Recording failed with errors. Saving output file...
+Output file saved as: rtk_profile2.trace
