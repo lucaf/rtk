@@ -59,11 +59,15 @@ fn run_build(args: &[String], verbose: u8) -> Result<i32> {
 lazy_static! {
     static ref BUILD_PROGRESS_RE: Regex =
         Regex::new(r"^\[(\d+)/(\d+)\]").unwrap();
-    // Swift compiler error/warning: /path/File.swift:10:5: error: message
+    // Swift compiler error/warning. Covers multiple formats. Path prefix may
+    // contain spaces, so we use `.+?` (non-greedy) instead of `\S+`.
+    //   /path/File.swift:10:5: error: message       (source file error)
+    //   /path/Package.swift: error: message         (package-level error)
+    //   error: message                              (top-level error)
     static ref BUILD_ERROR_RE: Regex =
-        Regex::new(r"^\S+:\d+:\d+: error:").unwrap();
+        Regex::new(r"^(?:.+?:\s+)?error:\s").unwrap();
     static ref BUILD_WARNING_RE: Regex =
-        Regex::new(r"^\S+:\d+:\d+: warning:").unwrap();
+        Regex::new(r"^(?:.+?:\s+)?warning:\s").unwrap();
     // "Build complete! (3.42s)" or "Build of product 'Foo' complete! (0.28s)"
     static ref BUILD_COMPLETE_RE: Regex =
         Regex::new(r"^Build (?:of product '.+' )?complete!").unwrap();

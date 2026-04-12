@@ -39,9 +39,14 @@ lazy_static! {
     // Resolved source packages lines (matched against trimmed input)
     static ref RESOLVED_PKG_RE: Regex =
         Regex::new(r"^(\S+):\s+\S+\s+@\s+(\S+)").unwrap();
-    // Compiler error/warning lines: /path/File.swift:10:5: error: message
-    static ref ERROR_RE: Regex = Regex::new(r"^\S+:\d+:\d+: error:").unwrap();
-    static ref WARNING_RE: Regex = Regex::new(r"^\S+:\d+:\d+: warning:").unwrap();
+    // Error/warning lines — covers multiple xcodebuild formats. Path prefix may
+    // contain spaces (e.g. "/tmp/metal code examples/Foo.xcodeproj"), so we use
+    // `.+?` (non-greedy) instead of `\S+`.
+    //   /path/File.swift:10:5: error: message       (source file error)
+    //   /path/Project.xcodeproj: error: message     (project-level error, e.g. signing)
+    //   error: message                              (top-level error)
+    static ref ERROR_RE: Regex = Regex::new(r"^(?:.+?:\s+)?error:\s").unwrap();
+    static ref WARNING_RE: Regex = Regex::new(r"^(?:.+?:\s+)?warning:\s").unwrap();
     // ** BUILD SUCCEEDED ** / ** BUILD FAILED ** / ** TEST SUCCEEDED ** etc.
     static ref BUILD_RESULT_RE: Regex =
         Regex::new(r"^\*\* (BUILD|TEST|CLEAN) (SUCCEEDED|FAILED) \*\*").unwrap();
@@ -53,8 +58,40 @@ lazy_static! {
         Regex::new(r"^(?:CreateBuildDirectory|cd |/Applications/Xcode|Build description|note: |User defaults|Command line invocation|\s+/|Test Suite |Test Case .* started)").unwrap();
 }
 
+/// Returns true if the output contains any marker we know how to filter:
+/// compile/link/emit lines, build result banners, XCTest results, errors, warnings,
+/// or resolved packages. If none are present, the output is from an informational
+/// subcommand (e.g. `-list`, `-version`, `-showsdks`) and should passthrough unchanged.
+fn looks_like_build_output(clean: &str) -> bool {
+    for line in clean.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            continue;
+        }
+        if COMPILE_RE.is_match(trimmed)
+            || LINK_RE.is_match(trimmed)
+            || EMIT_MODULE_RE.is_match(trimmed)
+            || BUILD_RESULT_RE.is_match(trimmed)
+            || XCTEST_RESULT_RE.is_match(trimmed)
+            || ERROR_RE.is_match(trimmed)
+            || WARNING_RE.is_match(trimmed)
+            || RESOLVED_PKG_RE.is_match(trimmed)
+        {
+            return true;
+        }
+    }
+    false
+}
+
 fn filter_xcodebuild(output: &str) -> String {
     let clean = strip_ansi(output);
+
+    // Passthrough for informational subcommands (-list, -version, -showsdks, etc.)
+    // that produce output with none of our expected markers. Empty input keeps the
+    // legacy "xcodebuild" header (treated as a successful silent build).
+    if !clean.trim().is_empty() && !looks_like_build_output(&clean) {
+        return clean.trim().to_string();
+    }
 
     let mut compiled_files: Vec<(String, String)> = Vec::new(); // (file, target)
     let mut linked_targets: Vec<String> = Vec::new();
@@ -253,6 +290,76 @@ mod tests {
     fn test_filter_xcodebuild_empty() {
         let output = filter_xcodebuild("");
         assert!(output.contains("xcodebuild"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_passthrough_list() {
+        // `xcodebuild -list` output: no build markers, must passthrough.
+        let input = "Information about project \"CustomMetalView\":\n\
+            Targets:\n\
+                CustomMetalView-macOS\n\
+                CustomMetalView-iOS\n\
+            Schemes:\n\
+                CustomMetalView-iOS\n";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("Information about project"));
+        assert!(output.contains("CustomMetalView-iOS"));
+        assert!(output.contains("Schemes:"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_passthrough_version() {
+        let input = "Xcode 26.4\nBuild version 17E192\n";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("Xcode 26.4"));
+        assert!(output.contains("Build version 17E192"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_passthrough_showsdks() {
+        let input = "iOS SDKs:\n\
+            iOS 18.0                 -sdk iphoneos18.0\n\n\
+            macOS SDKs:\n\
+            macOS 15.0               -sdk macosx15.0\n";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("iOS SDKs:"));
+        assert!(output.contains("iphoneos18.0"));
+        assert!(output.contains("macOS SDKs:"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_project_level_error() {
+        // Real-world case: signing/provisioning errors are project-level, not source-level.
+        // Format: /path/Project.xcodeproj: error: ...
+        let input = "SwiftCompile normal arm64 /p/Foo.swift (in target 'App' from project 'App')\n\
+            /tmp/App.xcodeproj: error: Signing for \"App\" requires a development team.\n\
+            ** BUILD FAILED **\n";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("Errors (1)"));
+        assert!(output.contains("Signing for"));
+        assert!(output.contains("BUILD FAILED"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_error_with_spaces_in_path() {
+        // Paths with spaces (like "/tmp/metal code examples/...") must still match.
+        let input = "SwiftCompile normal arm64 /p/Foo.swift (in target 'App' from project 'App')\n\
+            /tmp/metal code examples/App.xcodeproj: error: Signing requires a development team.\n\
+            ** BUILD FAILED **\n";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("Errors (1)"));
+        assert!(output.contains("Signing requires"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_toplevel_error() {
+        // Format: error: ...  (no path prefix)
+        let input = "SwiftCompile normal arm64 /p/Foo.swift (in target 'App' from project 'App')\n\
+            error: no such module 'Foundation'\n\
+            ** BUILD FAILED **\n";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("Errors (1)"));
+        assert!(output.contains("no such module"));
     }
 
     #[test]
