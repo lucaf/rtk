@@ -58,8 +58,35 @@ struct RuleStats {
     files: HashSet<String>,
 }
 
+/// Returns true if output has any marker we know how to filter: a violation line,
+/// a lint summary, or a corrected-violations line. Otherwise the output is from an
+/// informational subcommand (e.g. `swiftlint version`, `swiftlint rules`) and should
+/// passthrough unchanged.
+fn looks_like_lint_output(clean: &str) -> bool {
+    for line in clean.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            continue;
+        }
+        if VIOLATION_RE.is_match(trimmed)
+            || SUMMARY_RE.is_match(trimmed)
+            || CORRECTED_RE.is_match(trimmed)
+        {
+            return true;
+        }
+    }
+    false
+}
+
 fn filter_swiftlint(output: &str) -> String {
     let clean = strip_ansi(output);
+
+    // Passthrough for informational subcommands (version, rules, reporters, docs)
+    // that produce no violation/summary lines. Empty input keeps the legacy
+    // "No violations" behavior (treated as a clean lint pass).
+    if !clean.trim().is_empty() && !looks_like_lint_output(&clean) {
+        return clean.trim().to_string();
+    }
 
     let mut by_rule: HashMap<String, RuleStats> = HashMap::new();
     let mut summary_line = String::new();
@@ -200,6 +227,27 @@ mod tests {
     fn test_filter_swiftlint_empty() {
         let output = filter_swiftlint("");
         assert!(output.contains("No violations"));
+    }
+
+    #[test]
+    fn test_filter_swiftlint_passthrough_version() {
+        let output = filter_swiftlint("0.63.2\n");
+        assert_eq!(output, "0.63.2");
+    }
+
+    #[test]
+    fn test_filter_swiftlint_passthrough_rules() {
+        // `swiftlint rules` output — table format, no violation lines.
+        let input = "+-------------------+---------+---------+\n\
+            | identifier        | opt-in  | correct |\n\
+            +-------------------+---------+---------+\n\
+            | line_length       | no      | no      |\n\
+            | force_cast        | no      | no      |\n\
+            +-------------------+---------+---------+\n";
+        let output = filter_swiftlint(input);
+        assert!(output.contains("line_length"));
+        assert!(output.contains("force_cast"));
+        assert!(output.contains("identifier"));
     }
 
     #[test]

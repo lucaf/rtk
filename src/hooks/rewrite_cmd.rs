@@ -16,9 +16,19 @@ use std::io::Write;
 /// | 2    | (none)   | Deny rule matched — hook defers to Claude Code native deny.  |
 /// | 3    | rewritten| Ask rule matched — hook rewrites but lets Claude Code prompt.|
 pub fn run(cmd: &str) -> anyhow::Result<()> {
-    let excluded = crate::core::config::Config::load()
-        .map(|c| c.hooks.exclude_commands)
-        .unwrap_or_default();
+    let config = crate::core::config::Config::load().unwrap_or_default();
+
+    // Check global disable.
+    if !config.hooks.enabled {
+        std::process::exit(1);
+    }
+
+    // Check per-project disable (.rtk/disabled marker).
+    if crate::hooks::toggle::is_project_disabled() {
+        std::process::exit(1);
+    }
+
+    let excluded = config.hooks.exclude_commands;
 
     // SECURITY: check deny/ask BEFORE rewrite so non-RTK commands are also covered.
     let verdict = check_command(cmd);

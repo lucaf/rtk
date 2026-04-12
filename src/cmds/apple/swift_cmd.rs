@@ -59,11 +59,15 @@ fn run_build(args: &[String], verbose: u8) -> Result<i32> {
 lazy_static! {
     static ref BUILD_PROGRESS_RE: Regex =
         Regex::new(r"^\[(\d+)/(\d+)\]").unwrap();
-    // Swift compiler error/warning: /path/File.swift:10:5: error: message
+    // Swift compiler error/warning. Covers multiple formats. Path prefix may
+    // contain spaces, so we use `.+?` (non-greedy) instead of `\S+`.
+    //   /path/File.swift:10:5: error: message       (source file error)
+    //   /path/Package.swift: error: message         (package-level error)
+    //   error: message                              (top-level error)
     static ref BUILD_ERROR_RE: Regex =
-        Regex::new(r"^\S+:\d+:\d+: error:").unwrap();
+        Regex::new(r"^(?:.+?:\s+)?error:\s").unwrap();
     static ref BUILD_WARNING_RE: Regex =
-        Regex::new(r"^\S+:\d+:\d+: warning:").unwrap();
+        Regex::new(r"^(?:.+?:\s+)?warning:\s").unwrap();
     // "Build complete! (3.42s)" or "Build of product 'Foo' complete! (0.28s)"
     static ref BUILD_COMPLETE_RE: Regex =
         Regex::new(r"^Build (?:of product '.+' )?complete!").unwrap();
@@ -346,9 +350,10 @@ fn run_package(args: &[String], verbose: u8) -> Result<i32> {
     }
 
     // Only apply the describe filter for "describe" subcommand (or no subcommand).
-    // Other subcommands (resolve, update, clean, etc.) have different output formats.
-    let is_describe = args.is_empty()
-        || args.first().is_some_and(|a| a == "describe" || a == "dump-package");
+    // Other subcommands (resolve, update, clean, dump-package, etc.) have different
+    // output formats — dump-package in particular is JSON and would be silently
+    // dropped by the describe-format filter.
+    let is_describe = args.is_empty() || args.first().is_some_and(|a| a == "describe");
 
     runner::run_filtered(
         cmd,
@@ -378,6 +383,18 @@ lazy_static! {
 
 fn filter_swift_package(output: &str) -> String {
     let clean = strip_ansi(output);
+
+    // Safety net: if the output has no recognizable describe-format sections,
+    // passthrough. Prevents data loss on unexpected subcommands (e.g. resolve,
+    // update) that slip past the dispatcher.
+    if !clean.trim().is_empty()
+        && !clean.lines().any(|l| {
+            let t = l.trim();
+            t == "Dependencies:" || t == "Products:" || t == "Targets:" || PKG_NAME_RE.is_match(l)
+        })
+    {
+        return clean.trim().to_string();
+    }
 
     let mut pkg_name = String::new();
     let mut deps: Vec<String> = Vec::new();
@@ -661,19 +678,26 @@ mod tests {
 
     #[test]
     fn test_filter_swift_package_resolve_output() {
-        // `swift package resolve` output looks nothing like `describe` —
-        // filter should return something sensible (package name if present, or minimal output)
+        // `swift package resolve` output looks nothing like `describe`.
+        // Safety net: should passthrough unchanged rather than emit a misleading
+        // empty "Package:" header that loses all info.
         let input = "Fetching https://github.com/apple/swift-nio.git\n\
-            Fetched https://github.com/apple/swift-nio.git from cache (0.42s)\n\
-            Computing version for swift-nio\n\
             Computed swift-nio at 2.64.0 (0.01s)\n\
-            Creating working copy for swift-nio\n\
             Working copy of swift-nio resolved at 2.64.0\n";
         let output = filter_swift_package(input);
-        // No structured sections → just "Package:" with empty name
-        assert!(output.contains("Package:"));
-        // Should not panic or produce garbage
-        assert!(!output.is_empty());
+        assert!(output.contains("Fetching"));
+        assert!(output.contains("swift-nio"));
+        assert!(output.contains("2.64.0"));
+    }
+
+    #[test]
+    fn test_filter_swift_package_dump_package_json() {
+        // `swift package dump-package` outputs JSON. The describe filter would
+        // silently drop all of this; the safety net must passthrough instead.
+        let input = "{\n  \"name\" : \"MyPackage\",\n  \"dependencies\" : []\n}\n";
+        let output = filter_swift_package(input);
+        assert!(output.contains("\"name\""));
+        assert!(output.contains("MyPackage"));
     }
 
     // ── swift run ────────────────────────────────────────────────────────
