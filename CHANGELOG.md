@@ -5,6 +5,41 @@ All notable changes to rtk (Rust Token Killer) will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased — `feature/apple`
+
+### Added
+
+- **Apple ecosystem filters**: 5 new command modules with token savings of 90-100% on real-world workloads
+  - `rtk swift build|test|package|run` — Swift Package Manager (`src/cmds/apple/swift_cmd.rs`). Validated against swift-algorithms, swift-argument-parser, swift-collections, swift-syntax, swift-nio (99.9% savings on swift-syntax's 3,528-test suite).
+  - `rtk xcodebuild` — Xcode build/test (`src/cmds/apple/xcodebuild_cmd.rs`). Captures errors, warnings, compile file groups, link targets, resolved packages, and XCTest results in both legacy and modern (Xcode 26+) formats.
+  - `rtk swiftlint` — SwiftLint with rule aggregation (`src/cmds/apple/swiftlint_cmd.rs`). 99.9% savings on swift-syntax (114,946 → 115 tokens, 39 rules grouped).
+  - `rtk simctl` (via `xcrun simctl`) — Simulator listing with section-aware compaction (`src/cmds/apple/simctl_cmd.rs`).
+  - `rtk xctrace` (via `xcrun xctrace`) — Instruments CLI with template/device/record subcommand detection (`src/cmds/apple/xctrace_cmd.rs`).
+- **`rtk enable` / `rtk disable` / `rtk status`** — toggle hook rewriting globally (in `~/.config/rtk/config.toml`) or per-project (via `.rtk/disabled` marker file). Either level being disabled causes the rewrite hook to passthrough.
+- **Rigorous validation harness** at `scripts/validate-apple/` — 4 Python validators (success-path, failure-injection, deep edge cases, 11-project matrix) verifying no critical signal is silently dropped. Currently 71/71 scenarios pass across 11 Apple open-source projects.
+- **Comprehensive code-review docs** at `docs/contributing/APPLE_MODULE_REVIEW.md` covering architecture, regex risks, known limitations, and validation methodology.
+
+### Fixed
+
+- **`core`**: tee hint (`[full output: ~/Library/...]`) now goes to stderr instead of stdout, preventing JSON/XML/CSV output corruption when commands exit non-zero (e.g., `rtk swiftlint --reporter json | jq` now works). Affects all modules using `runner::print_with_hint`.
+- **`apple/xcodebuild`**: capture XCTest results in modern Xcode 26+ format (`Test case 'Suite.testName()' passed on 'My Mac - xctest (PID)'`). Previous regex matched only legacy `Test Case '-[Module.Suite testName]'` format, silently dropping every test result on modern toolchains.
+- **`apple/swift,xcodebuild`**: support Unicode test method names (`testPasses_中文测试`, `test絵文字_🚀_📦`). Regex changed from `(\w+)` to `([^\]]+)` for the test-name capture group.
+- **`apple/xcodebuild`**: capture project-level errors (signing, provisioning) and top-level errors (`error: emit-module failed`). Broadened `ERROR_RE` from `^\S+:\d+:\d+: error:` to `^(?:.+?:\s+)?error:\s` and also matches paths containing spaces (e.g., `/tmp/metal code examples/Foo.xcodeproj`).
+- **`apple/xcodebuild,swiftlint`**: passthrough heuristic for informational subcommands (`xcodebuild -list`, `-version`, `-showsdks`; `swiftlint version`, `rules`). Previous behavior dropped all output, leaving only the filter's fixed header.
+- **`apple/swift package`**: `dump-package` JSON output is no longer routed through the describe-format filter (which would silently drop everything). Added safety-net passthrough inside `filter_swift_package` for any input lacking describe-format section markers.
+- **`apple/swift,xcodebuild`**: removed dead `XCTEST_SUMMARY_RE` regex declarations.
+
+### Known limitations
+
+- **Cross-module tee-to-stdout bug**: 7 other call sites (aws_cmd, vitest_cmd, playwright_cmd, lint_cmd, gt_cmd, rust/runner, main.rs TOML dispatch) bypass `print_with_hint` and emit the hint to stdout via `println!`. Same fix as `runner::print_with_hint` would apply. Tracked in APPLE_MODULE_REVIEW.md §6.1 as out-of-scope follow-up.
+- **iOS Simulator / xctrace recordings**: untestable on the current development machine (no simulators installed).
+- **Modern Xcode 26 build system**: `xcodebuild build` no longer emits `SwiftCompile`/`Ld` task markers, so compile file counts are missing from filtered output for successful builds. Errors, warnings, and `** BUILD SUCCEEDED/FAILED **` are unaffected.
+
+### Performance
+
+- RTK binary cold start: 4.6ms mean (3.5–6.6ms range), under the <10ms target.
+- RTK overhead per command: ~17ms on fast commands (`swift --version`), 39ms on `simctl list`, 133ms (3.9%) on `swift test` (3.5s).
+
 ## [0.35.0](https://github.com/rtk-ai/rtk/compare/v0.34.3...v0.35.0) (2026-04-06)
 
 
