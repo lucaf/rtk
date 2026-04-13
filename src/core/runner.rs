@@ -7,10 +7,12 @@ use crate::core::tracking;
 use crate::core::utils::{exit_code_from_output, exit_code_from_status};
 
 pub fn print_with_hint(filtered: &str, raw: &str, tee_label: &str, exit_code: i32) {
+    println!("{}", filtered);
+    // Print the tee hint to stderr so it doesn't corrupt machine-readable stdout
+    // (e.g. JSON/XML/CSV from --reporter modes). Humans still see it in the terminal
+    // since most shells interleave stderr with stdout.
     if let Some(hint) = crate::core::tee::tee_and_hint(raw, tee_label, exit_code) {
-        println!("{}\n{}", filtered, hint);
-    } else {
-        println!("{}", filtered);
+        eprintln!("{}", hint);
     }
 }
 

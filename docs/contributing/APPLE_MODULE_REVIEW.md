@@ -349,12 +349,22 @@ For every project:
 
 ### Data-loss bugs fixed during validation development
 
-The rigorous harness uncovered **4 data-loss bugs** that escaped unit-test coverage. All fixed in the merge commit that added validation:
+The rigorous harness uncovered **5 data-loss bugs** that escaped unit-test coverage. All fixed in the validation commit:
 
 1. **Informational subcommands silently dropped** — `xcodebuild -list` / `-version` / `-showsdks` and `swiftlint version` / `rules` had output replaced with the filter's fixed header. Fixed by adding passthrough heuristic (if no build/lint markers detected, return raw unchanged).
 2. **`ERROR_RE` too narrow** — only matched source-file format (`path:line:col: error:`). Project-level errors (signing, provisioning) and top-level errors (`error: emit-module failed`) were dropped. Broadened to `^(?:.+?:\s+)?error:\s`.
 3. **Paths with spaces not matched** — `\S+` couldn't capture paths like `/tmp/metal code examples/Foo.xcodeproj`. Changed to non-greedy `.+?`.
 4. **`swift package dump-package` JSON dropped** — the describe-format filter was incorrectly applied to JSON output. Removed from dispatch + added safety-net passthrough inside `filter_swift_package`.
+5. **Tee hint corrupted machine-readable stdout** — `[full output: ~/Library/...]` was appended to stdout after structured output (JSON/XML/CSV from `swiftlint --reporter json` etc.), making JSON/XML unparseable. Fixed by emitting the hint to stderr instead. Humans still see it (terminals interleave), but `rtk swiftlint --reporter json | jq` now works.
+
+### Extended validation (gaps closed)
+
+After initial validation found 4 bugs, additional gap-closing tests covered:
+
+- **xcodebuild test failures** — deployment-target errors (`xcodebuild: error: Failed to build...`) captured by broadened error regex
+- **swiftlint custom reporters** — `--reporter json`, `junit`, `markdown`, `csv` all produce valid parseable output (verified with `python3 -c "import json; json.load(...)"` and `xml.etree.ElementTree.fromstring(...)`)
+- **Real Apple sample app** — `apple/sample-food-truck` (SwiftUI multiplatform Xcode project) builds correctly; macOS-availability errors captured with file:line; 99.4% savings on 3,723-token build output
+- **swift package update/resolve/clean/show-dependencies/tools-version/plugin --list/experimental-dump-symbol-graph** — all confirmed passthrough preserves output exactly
 
 ### How to re-run validation
 
