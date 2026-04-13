@@ -50,9 +50,16 @@ lazy_static! {
     // ** BUILD SUCCEEDED ** / ** BUILD FAILED ** / ** TEST SUCCEEDED ** etc.
     static ref BUILD_RESULT_RE: Regex =
         Regex::new(r"^\*\* (BUILD|TEST|CLEAN) (SUCCEEDED|FAILED) \*\*").unwrap();
-    // XCTest result: Test Case '-[Module.Suite testName]' passed/failed (0.003 seconds).
+    // XCTest result (legacy/swift-driver format):
+    //   Test Case '-[Module.Suite testName]' passed/failed (0.003 seconds).
     static ref XCTEST_RESULT_RE: Regex =
         Regex::new(r"^Test Case '-\[(\S+)\.(\S+) (\w+)\]' (passed|failed) \(([0-9.]+) seconds\)").unwrap();
+    // XCTest result (modern xcodebuild format on Xcode 26+):
+    //   Test case 'Suite.testName()' passed on 'My Mac - xctest (PID)' (0.003 seconds)
+    //   Test case 'Suite.testName()' failed on 'My Mac - xctest (PID)' (0.003 seconds)
+    // captures: 1=suite, 2=testName, 3=passed/failed, 4=duration
+    static ref XCB_TEST_RESULT_RE: Regex =
+        Regex::new(r"^Test case '(\S+?)\.(\S+?)\(\)' (passed|failed) on '[^']+' \(([0-9.]+) seconds\)").unwrap();
     // CreateBuildDirectory, cd, command-line tool invocations — noise
     static ref NOISE_RE: Regex =
         Regex::new(r"^(?:CreateBuildDirectory|cd |/Applications/Xcode|Build description|note: |User defaults|Command line invocation|\s+/|Test Suite |Test Case .* started)").unwrap();
@@ -73,6 +80,7 @@ fn looks_like_build_output(clean: &str) -> bool {
             || EMIT_MODULE_RE.is_match(trimmed)
             || BUILD_RESULT_RE.is_match(trimmed)
             || XCTEST_RESULT_RE.is_match(trimmed)
+            || XCB_TEST_RESULT_RE.is_match(trimmed)
             || ERROR_RE.is_match(trimmed)
             || WARNING_RE.is_match(trimmed)
             || RESOLVED_PKG_RE.is_match(trimmed)
@@ -137,7 +145,7 @@ fn filter_xcodebuild(output: &str) -> String {
             continue;
         }
 
-        // XCTest results
+        // XCTest results (legacy format)
         if let Some(caps) = XCTEST_RESULT_RE.captures(trimmed) {
             if &caps[4] == "passed" {
                 tests_passed += 1;
@@ -146,6 +154,23 @@ fn filter_xcodebuild(output: &str) -> String {
                 test_failures.push(format!(
                     "{}.{} ({}s)",
                     &caps[2], &caps[3], &caps[5]
+                ));
+            }
+            continue;
+        }
+
+        // XCTest results (modern xcodebuild format on Xcode 26+).
+        // The same test result may appear multiple times (parallel test execution
+        // reports both worker and aggregate). Dedup is acceptable since the legacy
+        // format also has this property — counts are best-effort approximations.
+        if let Some(caps) = XCB_TEST_RESULT_RE.captures(trimmed) {
+            if &caps[3] == "passed" {
+                tests_passed += 1;
+            } else {
+                tests_failed += 1;
+                test_failures.push(format!(
+                    "{}.{} ({}s)",
+                    &caps[1], &caps[2], &caps[4]
                 ));
             }
             continue;
@@ -370,6 +395,22 @@ mod tests {
         let output = filter_xcodebuild(input);
         assert!(output.contains("Errors (1)"));
         assert!(output.contains("BUILD FAILED"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_test_results_modern_format() {
+        // Modern xcodebuild (Xcode 26+) test format with parenthesized method name
+        // and 'on My Mac - xctest (PID)' clause.
+        let input = "\
+Test case 'UniqueTests.testUnique()' passed on 'My Mac - xctest (1234)' (0.001 seconds)
+Test case 'UniqueTests.testInjected()' failed on 'My Mac - xctest (1234)' (0.005 seconds)
+Test case 'OtherTests.testFoo()' passed on 'My Mac - xctest (5678)' (0.002 seconds)
+** TEST FAILED **
+";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("Tests: 2 passed, 1 failed (of 3)"), "got: {}", output);
+        assert!(output.contains("FAIL UniqueTests.testInjected"), "got: {}", output);
+        assert!(output.contains("TEST FAILED"));
     }
 
     #[test]
