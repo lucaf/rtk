@@ -361,10 +361,26 @@ The rigorous harness uncovered **5 data-loss bugs** that escaped unit-test cover
 
 After initial validation found 4 bugs, additional gap-closing tests covered:
 
-- **xcodebuild test failures** — deployment-target errors (`xcodebuild: error: Failed to build...`) captured by broadened error regex
-- **swiftlint custom reporters** — `--reporter json`, `junit`, `markdown`, `csv` all produce valid parseable output (verified with `python3 -c "import json; json.load(...)"` and `xml.etree.ElementTree.fromstring(...)`)
-- **Real Apple sample app** — `apple/sample-food-truck` (SwiftUI multiplatform Xcode project) builds correctly; macOS-availability errors captured with file:line; 99.4% savings on 3,723-token build output
-- **swift package update/resolve/clean/show-dependencies/tools-version/plugin --list/experimental-dump-symbol-graph** — all confirmed passthrough preserves output exactly
+- **xcodebuild test failures** — deployment-target errors (`xcodebuild: error: Failed to build...`) captured by broadened error regex. Modern Xcode 26+ test-result format (`Test case 'Suite.testName()' passed on 'My Mac - xctest (PID)' (0.001 seconds)`) added as `XCB_TEST_RESULT_RE` after live testing showed the legacy `XCTEST_RESULT_RE` missed every result on Xcode 26.
+- **swiftlint custom reporters** — `--reporter json`, `junit`, `markdown`, `csv` all produce valid parseable output (verified with `python3 -c "import json; json.load(...)"` and `xml.etree.ElementTree.fromstring(...)`). Required moving the tee hint to stderr to prevent JSON corruption.
+- **Real Apple sample app** — `apple/sample-food-truck` (SwiftUI multiplatform Xcode project) builds correctly; macOS-availability errors captured with file:line; 99.4% savings on 3,723-token build output.
+- **swift package update/resolve/clean/show-dependencies/tools-version/plugin --list/experimental-dump-symbol-graph** — all confirmed passthrough preserves output byte-for-byte.
+- **swift run with crashes** — `fatalError`, array out-of-bounds traps, and explicit `exit(N)` all preserve the crash trace and propagate the correct exit code (133 for signal traps, 42 for explicit `exit(42)`). Build noise stripped, program output and crash details kept.
+- **Unicode / encoding** — XCTest names with CJK ideographs (`testPasses_中文测试`), Japanese/emoji (`test絵文字_🚀_📦`), assertion messages with multi-byte chars (`Erreur française avec ñ é ü © → ×`), unicode in directory paths, RTL Arabic, math symbols, box-drawing — all preserved byte-for-byte. Required relaxing `XCTEST_RESULT_RE` from `(\w+)` to `([^\]]+)` for the test-name capture group; the prior regex silently dropped any test with a non-ASCII name.
+
+### Out-of-scope follow-up: tee-to-stdout in other modules
+
+The "tee hint corrupting machine-readable stdout" bug (#5 above) was fixed in `src/core/runner.rs::print_with_hint`, which is what the Apple module uses. **The same pattern appears in 6 other module entry points** that bypass `print_with_hint` and call `println!("{}\n{}", filtered, hint)` directly:
+
+- `src/cmds/cloud/aws_cmd.rs` (lines 365, 370, 423, 476) — **highest impact**, aws CLI primarily emits JSON
+- `src/cmds/js/vitest_cmd.rs` (line 267) — affects `--reporter=json`
+- `src/cmds/js/playwright_cmd.rs` (line 321) — affects `--reporter=json`
+- `src/cmds/js/lint_cmd.rs` (line 212) — affects `--format=json`
+- `src/cmds/git/gt_cmd.rs` (line 67)
+- `src/cmds/rust/runner.rs` (lines 56, 94)
+- `src/main.rs` (line 1200, TOML filter dispatch path)
+
+Each of these would benefit from the same fix: split `println!("{}\n{}", filtered, hint)` into `println!("{}", filtered);` + `eprintln!("{}", hint);`. Out of scope for the Apple module review but should be tracked as a separate PR. Without the fix, these modules will corrupt JSON/XML/CSV when the underlying command exits non-zero AND tee is enabled.
 
 ### How to re-run validation
 

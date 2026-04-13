@@ -52,8 +52,10 @@ lazy_static! {
         Regex::new(r"^\*\* (BUILD|TEST|CLEAN) (SUCCEEDED|FAILED) \*\*").unwrap();
     // XCTest result (legacy/swift-driver format):
     //   Test Case '-[Module.Suite testName]' passed/failed (0.003 seconds).
+    // Test name uses [^\]]+ (anything but closing bracket) to support unicode
+    // method names like testPasses_中文 or test絵文字_🚀.
     static ref XCTEST_RESULT_RE: Regex =
-        Regex::new(r"^Test Case '-\[(\S+)\.(\S+) (\w+)\]' (passed|failed) \(([0-9.]+) seconds\)").unwrap();
+        Regex::new(r"^Test Case '-\[(\S+)\.(\S+) ([^\]]+)\]' (passed|failed) \(([0-9.]+) seconds\)").unwrap();
     // XCTest result (modern xcodebuild format on Xcode 26+):
     //   Test case 'Suite.testName()' passed on 'My Mac - xctest (PID)' (0.003 seconds)
     //   Test case 'Suite.testName()' failed on 'My Mac - xctest (PID)' (0.003 seconds)

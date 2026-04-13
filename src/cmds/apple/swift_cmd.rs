@@ -168,8 +168,10 @@ fn run_test(args: &[String], verbose: u8) -> Result<i32> {
 
 lazy_static! {
     // XCTest: Test Case '-[Module.Suite testName]' passed (0.003 seconds).
+    // Test name uses [^\]]+ (anything but closing bracket) to support unicode
+    // method names like testPasses_中文 or test絵文字_🚀.
     static ref XCTEST_RESULT_RE: Regex =
-        Regex::new(r"^Test Case '-\[(\S+)\.(\S+) (\w+)\]' (passed|failed) \(([0-9.]+) seconds\)").unwrap();
+        Regex::new(r"^Test Case '-\[(\S+)\.(\S+) ([^\]]+)\]' (passed|failed) \(([0-9.]+) seconds\)").unwrap();
     // XCTest error detail: /path/File.swift:42: error: -[Module.Suite testFoo] : XCTAssert...
     static ref XCTEST_ERROR_RE: Regex =
         Regex::new(r"^\S+:\d+: error: -\[").unwrap();
@@ -627,6 +629,18 @@ mod tests {
     fn test_filter_swift_test_empty() {
         let output = filter_swift_test("");
         assert!(output.contains("No tests found"));
+    }
+
+    #[test]
+    fn test_filter_swift_test_unicode_test_names() {
+        // Test names with Unicode (Chinese, Japanese, emoji) must be counted.
+        // Prior bug: regex used `(\w+)` which only matched ASCII word chars.
+        let input = "Test Case '-[Module.Suite testPasses_中文测试]' passed (0.001 seconds).\n\
+            Test Case '-[Module.Suite test絵文字_🚀]' passed (0.002 seconds).\n\
+            Test Case '-[Module.Suite testFails_失败]' failed (0.003 seconds).\n";
+        let output = filter_swift_test(input);
+        assert!(output.contains("2 passed, 1 failed"), "got: {}", output);
+        assert!(output.contains("testFails_失败"), "got: {}", output);
     }
 
     #[test]
