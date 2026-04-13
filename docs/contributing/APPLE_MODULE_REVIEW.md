@@ -378,7 +378,7 @@ Two filters in this module have been tested only against synthetic or trivially-
 - **Live-tested** only on a machine with zero simulators installed (trivially small output).
 - **Not validated** against realistic `xcrun simctl list` output from a developer machine with 10+ simulator runtimes and 20+ devices.
 - **Subcommands beyond `list`** (`boot`, `shutdown`, `install`, `launch`, `terminate`, `erase`, `addmedia`, `openurl`, `push`, `location`, etc.) are passthrough but their passthrough behavior has not been verified with real output.
-- **`simctl list --json`** (JSON output) — not tested; the passthrough heuristic should keep it intact.
+- **`simctl list --json`** and other non-default formats: protected by `looks_like_simctl_list_output` heuristic (added post-review). If no `== Section ==` headers or device lines are detected, the filter returns input unchanged instead of emitting misleading all-zero counts.
 
 #### `xctrace_cmd.rs` (`rtk xctrace ...`)
 

@@ -9,11 +9,14 @@
 //!
 //! This filter has been unit-tested against a synthetic fixture (`tests/fixtures/
 //! simctl_list_raw.txt`) but **not** against real `xcrun simctl list` output on a
-//! machine with installed simulator runtimes. The passthrough heuristic means
-//! unrecognized input is returned unchanged — so the worst case is "no compression"
-//! rather than "data loss" — but users running real simctl workflows should verify
-//! output integrity with `rtk proxy xcrun simctl ...` if they hit unexpected gaps.
-//! PRs with real-world fixtures welcome.
+//! machine with installed simulator runtimes.
+//!
+//! A `looks_like_simctl_list_output` passthrough heuristic detects non-default
+//! formats (JSON output from `--json`, single-section output from
+//! `list devices booted`, etc.) and returns the input unchanged — so the worst
+//! case is "no compression" rather than "data loss". Users running real simctl
+//! workflows should verify output integrity with `rtk proxy xcrun simctl ...`
+//! if they hit unexpected gaps. PRs with real-world fixtures welcome.
 
 use crate::core::runner;
 use crate::core::utils::{resolved_command, strip_ansi};

@@ -29,6 +29,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`apple/swift package`**: `dump-package` JSON output is no longer routed through the describe-format filter (which would silently drop everything). Added safety-net passthrough inside `filter_swift_package` for any input lacking describe-format section markers.
 - **`apple/swift,xcodebuild`**: removed dead `XCTEST_SUMMARY_RE` regex declarations.
 
+### Fixed (post-review, round 2)
+
+Code-review pass surfaced additional issues; all fixed:
+
+- **`hooks/rewrite_cmd` [security]**: `rtk disable` no longer bypasses RTK-defined deny/ask rules. Previously the disable check ran before `check_command`, silently removing deny protection when hooks were disabled. Now deny/ask fires at highest priority; disable only skips the rewrite step.
+- **`hooks/toggle` [bug]**: `is_project_disabled()` walks ancestor directories instead of only checking CWD. Running RTK from any subdirectory of a disabled project now correctly honors the `.rtk/disabled` marker at the project root (git-style discovery).
+- **`apple/simctl` [data loss]**: added `looks_like_simctl_list_output` passthrough heuristic. Previously `simctl list --json` and `simctl list devices booted` (no `== Section ==` headers) produced misleading all-zero counts; now pass through unchanged.
+- **`apple/xctrace` [data loss]**: `list devices` now preserves devices without an indented `OS:` line (older Watch pairs, partial runtime installs) and fixes a `current_name` leak across device boundaries. Un-emitted devices flush with "(unknown OS)" on the next section/header.
+- **`apple/xcodebuild` [data loss]**: narrowed `NOISE_RE` from `\s+/` to `\s+/(?:Applications|usr|Library/Developer|var/folders)/`. The old pattern silently stripped Swift diagnostic continuation lines (e.g., `    /Path/File.swift:10: note: ...`) that happened to start with a user-project path; the new pattern targets only toolchain/system paths.
+- **`apple/swiftlint` [quality]**: appends swiftlint's own summary line (`Found N violations, M serious in K files`) after the rule-group listing so parsed counts can be cross-checked against authoritative totals.
+- **`apple` polish**: refactored `run()` functions to use `cmd.arg(sub).args(args)` one-liner (5 sites); simctl pair detection uses proper UUID regex instead of `len >= 36 && hex` heuristic; xctrace `detect_subcommand` uses exact equality instead of `starts_with`.
+
 ### Known limitations
 
 - **`rtk simctl` and `rtk xctrace` are fixture-validated only**: both filters have passed their unit tests against synthetic fixtures and zero-simulator live runs, but have not been validated against real simulator listings or actual Instruments recordings. The passthrough heuristic prevents data loss on unrecognized input (worst case: no compression), but specific subcommands with realistic output have not been verified. See APPLE_MODULE_REVIEW.md §6.1 "Filters with limited real-world validation" for details. PRs welcome.
