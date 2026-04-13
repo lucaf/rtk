@@ -40,6 +40,17 @@ Code-review pass surfaced additional issues; all fixed:
 - **`apple/xcodebuild` [data loss]**: narrowed `NOISE_RE` from `\s+/` to `\s+/(?:Applications|usr|Library/Developer|var/folders)/`. The old pattern silently stripped Swift diagnostic continuation lines (e.g., `    /Path/File.swift:10: note: ...`) that happened to start with a user-project path; the new pattern targets only toolchain/system paths.
 - **`apple/swiftlint` [quality]**: appends swiftlint's own summary line (`Found N violations, M serious in K files`) after the rule-group listing so parsed counts can be cross-checked against authoritative totals.
 - **`apple/swift,xcodebuild` [false positives]**: tightened ERROR_RE/WARNING_RE to require a path-like prefix ending in `.swift`/`.xcodeproj`/`.xcconfig` (or no prefix at all). Previously the regex matched any `Tag: error: …` prefix, misclassifying non-compile log lines such as `Logger.log: error: …`, `dyld: error: …`, and `Foo: error: …` as build errors. Added a unit test verifying these are no longer counted.
+
+### Fixed (post-review, round 3)
+
+Second-round review surfaced six more issues; all fixed:
+
+- **`apple/simctl` [data loss residual]**: passthrough heuristic now requires a `== Section ==` header, not just a device line. `simctl list devices booted` emits devices without section headers and previously bypassed the passthrough check to enter the aggregator, which then produced all-zero counts because the state machine stayed in `Section::None`. Device-only input now passes through unchanged.
+- **`apple/swift,xcodebuild` [false negatives]**: ERROR_RE/WARNING_RE extended to match diagnostics from `.m`/`.mm`/`.h`/`.c`/`.cpp`/`.cc`/`.pbxproj` in addition to `.swift`/`.xcodeproj`/`.xcconfig`. Mixed Apple projects (bridged ObjC, corrupt pbxproj) now show proper error counts instead of "Errors (0)" on failed builds.
+- **`apple/swift,xcodebuild` [quality]**: path-prefixed `note:` lines (Swift "did you mean 'Baz'?" fix-suggestions) are now captured in a Notes section alongside errors/warnings. Previously these fell through unmatched and were silently dropped — users lost valuable context.
+- **`hooks/toggle` [scope]**: `is_disabled_walking_up` now stops at the home directory boundary and at any ancestor containing `.git`. Prevents a stray `~/.rtk/disabled` from silently disabling every project under `$HOME`, and avoids crossing project-root boundaries.
+- **`hooks/rewrite_cmd` [docs]**: doc header now explicitly documents disable-interaction contract: deny still fires (security), ask degrades to passthrough (no exit 3), no rewrite happens. Removes ambiguity about the exit-code table.
+- **`hooks/rewrite_cmd` [testability]**: extracted `run()` business logic into pure `compute_outcome()` function returning a `RewriteOutcome` enum. Enables 7 new unit tests including the critical "deny fires even when hooks disabled" security invariant (previously only verified by manual code-review).
 - **`apple` polish**: refactored `run()` functions to use `cmd.arg(sub).args(args)` one-liner (5 sites); simctl pair detection uses proper UUID regex instead of `len >= 36 && hex` heuristic; xctrace `detect_subcommand` uses exact equality instead of `starts_with`.
 
 ### Known limitations
