@@ -24,10 +24,7 @@ use std::collections::HashMap;
 
 pub fn run(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("xcrun");
-    cmd.arg("simctl");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.arg("simctl").args(args);
 
     // Default to "list" if only "simctl" with no subcommand
     if args.is_empty() {
@@ -75,10 +72,38 @@ lazy_static! {
 
     // Unavailable runtime header
     static ref UNAVAILABLE_RE: Regex = Regex::new(r"^-- Unavailable:").unwrap();
+
+    // Pair entry: UUID (Booted|Shutdown) or UUID followed by device details.
+    // Line begins with a 36-char simulator UUID.
+    static ref PAIR_RE: Regex = Regex::new(r"^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}\b").unwrap();
+}
+
+/// Returns true if output contains any marker we know how to filter:
+/// `== Section ==` headers or device lines. Otherwise the output is from a
+/// non-default format (e.g. `--json`, `list devices booted` which has no
+/// section header) and should passthrough unchanged — the filter would
+/// otherwise emit misleading zero counts for every section.
+fn looks_like_simctl_list_output(clean: &str) -> bool {
+    for line in clean.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            continue;
+        }
+        if SECTION_RE.is_match(trimmed) || DEVICE_RE.is_match(trimmed) {
+            return true;
+        }
+    }
+    false
 }
 
 fn filter_simctl_list(output: &str) -> String {
     let clean = strip_ansi(output);
+
+    // Passthrough for non-default list formats (--json, list devices booted, etc.)
+    // Empty input keeps the legacy "simctl list" header for the stub case.
+    if !clean.trim().is_empty() && !looks_like_simctl_list_output(&clean) {
+        return clean.trim().to_string();
+    }
 
     let mut device_type_count = 0u32;
     let mut runtimes: Vec<String> = Vec::new();
@@ -151,8 +176,8 @@ fn filter_simctl_list(output: &str) -> String {
                 }
             }
             Section::Pairs => {
-                // Count pair headers (lines with UUIDs at start)
-                if trimmed.len() >= 36 && trimmed.as_bytes().first().is_some_and(|c| c.is_ascii_hexdigit()) {
+                // Count pair entries — lines starting with a simulator UUID.
+                if PAIR_RE.is_match(trimmed) {
                     pair_count += 1;
                 }
             }
@@ -262,6 +287,28 @@ mod tests {
         let output = filter_simctl_list("");
         assert!(output.contains("simctl list"));
         assert!(output.contains("Device types: 0"));
+    }
+
+    #[test]
+    fn test_filter_simctl_list_passthrough_json() {
+        // `simctl list --json` produces JSON with no `== Section ==` headers.
+        // Without the passthrough heuristic, the filter would emit misleading
+        // all-zero counts; instead it should pass JSON through unchanged.
+        let input = "{\n  \"devicetypes\" : [\n    {\n      \"name\" : \"iPhone 15\"\n    }\n  ]\n}\n";
+        let output = filter_simctl_list(input);
+        assert!(output.contains("\"devicetypes\""), "got: {}", output);
+        assert!(output.contains("iPhone 15"), "got: {}", output);
+        // Must not have replaced content with zero counts.
+        assert!(!output.contains("Device types: 0"), "got: {}", output);
+    }
+
+    #[test]
+    fn test_filter_simctl_list_passthrough_unrecognized() {
+        // Output without any section header or device line must passthrough.
+        let input = "No devices are currently booted.\n";
+        let output = filter_simctl_list(input);
+        assert!(output.contains("No devices are currently booted"));
+        assert!(!output.contains("Device types: 0"));
     }
 
     #[test]

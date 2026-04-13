@@ -17,9 +17,7 @@ use std::collections::{HashMap, HashSet};
 
 pub fn run(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("swiftlint");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.args(args);
 
     if verbose > 0 {
         eprintln!("Running: swiftlint {}", args.join(" "));
@@ -100,7 +98,8 @@ fn filter_swiftlint(output: &str) -> String {
 
         if let Some(caps) = VIOLATION_RE.captures(trimmed) {
             let file = shorten_path(&caps[1]);
-            let _line_num = &caps[2];
+            // caps[2] is the line number — unused by the aggregator but kept in
+            // VIOLATION_RE so future work can surface per-file hot lines.
             let severity = &caps[3];
             let rule_id = caps[5].to_string();
 
@@ -170,6 +169,14 @@ fn filter_swiftlint(output: &str) -> String {
 
     if rules.len() > 20 {
         result.push_str(&format!("  ... +{} more rules\n", rules.len() - 20));
+    }
+
+    // Append swiftlint's own summary line (if present) so the user can verify the
+    // parsed counts against swiftlint's authoritative totals.
+    if !summary_line.is_empty() {
+        result.push('\n');
+        result.push_str(&summary_line);
+        result.push('\n');
     }
 
     result.trim().to_string()

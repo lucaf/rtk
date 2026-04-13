@@ -30,10 +30,7 @@ use std::collections::HashMap;
 
 pub fn run(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("xcrun");
-    cmd.arg("xctrace");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.arg("xctrace").args(args);
 
     if verbose > 0 {
         eprintln!("Running: xcrun xctrace {}", args.join(" "));
@@ -73,8 +70,10 @@ fn detect_subcommand(args: &[String]) -> Subcommand {
         .collect();
 
     match positional.as_slice() {
-        ["list", sub] if sub.starts_with("template") => Subcommand::ListTemplates,
-        ["list", sub] if sub.starts_with("device") => Subcommand::ListDevices,
+        // Exact match (both singular and plural forms for `list templates/template`
+        // and `list devices/device` — xctrace accepts both).
+        ["list", sub] if *sub == "templates" || *sub == "template" => Subcommand::ListTemplates,
+        ["list", sub] if *sub == "devices" || *sub == "device" => Subcommand::ListDevices,
         ["record", ..] => Subcommand::Record,
         _ => Subcommand::Other,
     }
@@ -151,8 +150,33 @@ fn filter_list_devices(output: &str) -> String {
 
     let mut physical: Vec<String> = Vec::new();
     let mut simulators_by_os: HashMap<String, Vec<String>> = HashMap::new();
+    // Track whether the currently-held device header has been recorded yet.
+    // When the next header arrives (or the loop ends) without an OS line having
+    // matched, flush the pending device with "(unknown OS)" so it is not lost.
     let mut current_name = String::new();
+    let mut current_emitted = true;
+    let mut current_was_simulator = false;
     let mut in_simulators = false;
+
+    // Helper: flush a pending un-emitted device header.
+    let flush_pending = |name: &mut String,
+                         emitted: &mut bool,
+                         was_simulator: bool,
+                         physical: &mut Vec<String>,
+                         simulators_by_os: &mut HashMap<String, Vec<String>>| {
+        if !*emitted && !name.is_empty() {
+            if was_simulator {
+                simulators_by_os
+                    .entry("unknown".to_string())
+                    .or_default()
+                    .push(name.clone());
+            } else {
+                physical.push(format!("{} (unknown OS)", name));
+            }
+        }
+        *emitted = true;
+        name.clear();
+    };
 
     for line in clean.lines() {
         let trimmed = line.trim();
@@ -161,19 +185,36 @@ fn filter_list_devices(output: &str) -> String {
         }
 
         if let Some(caps) = SECTION_RE.captures(trimmed) {
+            // Section transition flushes any pending device from the previous section.
+            flush_pending(
+                &mut current_name,
+                &mut current_emitted,
+                current_was_simulator,
+                &mut physical,
+                &mut simulators_by_os,
+            );
             in_simulators = caps[1].contains("Simulator");
             continue;
         }
 
         if let Some(caps) = DEVICE_HEADER_RE.captures(trimmed) {
+            // A new header flushes any pending prior device that had no OS line.
+            flush_pending(
+                &mut current_name,
+                &mut current_emitted,
+                current_was_simulator,
+                &mut physical,
+                &mut simulators_by_os,
+            );
             current_name = caps[1].to_string();
+            current_emitted = false;
+            current_was_simulator = in_simulators;
             continue;
         }
 
         if let Some(caps) = DEVICE_OS_RE.captures(line) {
             let os = caps[1].trim().to_string();
-            if in_simulators {
-                // Extract just the OS family + version (e.g. "iOS 18.0")
+            if current_was_simulator {
                 let os_short = os.split('(').next().unwrap_or(&os).trim().to_string();
                 simulators_by_os
                     .entry(os_short)
@@ -182,11 +223,19 @@ fn filter_list_devices(output: &str) -> String {
             } else {
                 physical.push(format!("{} ({})", current_name, os));
             }
+            current_emitted = true;
             continue;
         }
-
-        // Skip other metadata lines (Model:, Disk Space:, etc.)
     }
+
+    // Flush any trailing un-emitted device at end of input.
+    flush_pending(
+        &mut current_name,
+        &mut current_emitted,
+        current_was_simulator,
+        &mut physical,
+        &mut simulators_by_os,
+    );
 
     let total_sims: usize = simulators_by_os.values().map(|d| d.len()).sum();
 
@@ -420,6 +469,50 @@ mod tests {
     fn test_filter_list_devices_empty() {
         let output = filter_list_devices("");
         assert!(output.contains("xctrace devices"));
+    }
+
+    #[test]
+    fn test_filter_list_devices_without_os_line() {
+        // Older Apple Watches in pairs, partially-installed runtimes, and some
+        // physical devices in certain configurations have no indented `OS:` line
+        // under the header. Previously these were silently dropped.
+        // NOTE: `\n    OS:` (no backslash line continuation) preserves leading
+        // whitespace, which DEVICE_OS_RE requires.
+        let input = concat!(
+            "== Devices ==\n",
+            "Luca's MacBook Air (C6A93794-F039-555A-A9E6-40FC28901A81)\n",
+            "    OS: macOS 15.4\n",
+            "PartialDevice (A1B2C3D4-E5F6-7A8B-9C0D-1E2F3A4B5C6D)\n",
+            "AnotherDevice (B2C3D4E5-F6A7-8B9C-0D1E-2F3A4B5C6D7E)\n",
+            "    OS: iOS 18.4\n",
+        );
+        let output = filter_list_devices(input);
+        // Both devices with OS info should appear
+        assert!(output.contains("MacBook Air"), "got: {}", output);
+        assert!(output.contains("AnotherDevice"), "got: {}", output);
+        // The device with no OS line should ALSO appear (with unknown OS), not be dropped
+        assert!(output.contains("PartialDevice"), "got: {}", output);
+        assert!(output.contains("unknown OS"), "got: {}", output);
+        // Physical count should be 3 (all preserved)
+        assert!(output.contains("Physical (3)"), "got: {}", output);
+    }
+
+    #[test]
+    fn test_filter_list_devices_current_name_no_leak() {
+        // Device without OS followed by another device — the second must not
+        // inherit the first one's name in any way. Both should be emitted with
+        // their correct names.
+        let input = concat!(
+            "== Devices ==\n",
+            "DeviceAlpha (C6A93794-F039-555A-A9E6-40FC28901A81)\n",
+            "DeviceBeta (A1B2C3D4-E5F6-7A8B-9C0D-1E2F3A4B5C6D)\n",
+            "    OS: iOS 18.0\n",
+        );
+        let output = filter_list_devices(input);
+        assert!(output.contains("DeviceAlpha"), "got: {}", output);
+        assert!(output.contains("DeviceBeta"), "got: {}", output);
+        // DeviceBeta should be emitted with its real OS, not "unknown"
+        assert!(output.contains("DeviceBeta (iOS 18.0)"), "got: {}", output);
     }
 
     // ── record ───────────────────────────────────────────────────────────

@@ -18,24 +18,27 @@ use std::io::Write;
 pub fn run(cmd: &str) -> anyhow::Result<()> {
     let config = crate::core::config::Config::load().unwrap_or_default();
 
-    // Check global disable.
-    if !config.hooks.enabled {
-        std::process::exit(1);
-    }
-
-    // Check per-project disable (.rtk/disabled marker).
-    if crate::hooks::toggle::is_project_disabled() {
-        std::process::exit(1);
-    }
-
-    let excluded = config.hooks.exclude_commands;
-
-    // SECURITY: check deny/ask BEFORE rewrite so non-RTK commands are also covered.
+    // SECURITY: check deny/ask BEFORE rewrite AND BEFORE disable checks, so
+    // non-RTK commands are also covered and RTK's deny rules still fire when
+    // the rewrite hook is disabled. A user who types `rtk disable` wants to
+    // stop auto-rewriting, not to bypass their own security deny rules.
     let verdict = check_command(cmd);
 
     if verdict == PermissionVerdict::Deny {
         std::process::exit(2);
     }
+
+    // Check global disable — after deny/ask so deny still works.
+    if !config.hooks.enabled {
+        std::process::exit(1);
+    }
+
+    // Check per-project disable (.rtk/disabled marker — walks up CWD ancestors).
+    if crate::hooks::toggle::is_project_disabled() {
+        std::process::exit(1);
+    }
+
+    let excluded = config.hooks.exclude_commands;
 
     match registry::rewrite_command(cmd, &excluded) {
         Some(rewritten) => match verdict {

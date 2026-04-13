@@ -21,9 +21,21 @@ fn is_disabled_in(root: &std::path::Path) -> bool {
     marker_path_in(root).exists()
 }
 
+/// Walk from `start` up through ancestor directories looking for `.rtk/disabled`.
+/// Returns true if any ancestor has the marker. Matches git's discovery semantics:
+/// run RTK from any subdirectory of the project and still honor the marker at the root.
+fn is_disabled_walking_up(start: &std::path::Path) -> bool {
+    for dir in start.ancestors() {
+        if is_disabled_in(dir) {
+            return true;
+        }
+    }
+    false
+}
+
 pub fn is_project_disabled() -> bool {
     std::env::current_dir()
-        .map(|cwd| is_disabled_in(&cwd))
+        .map(|cwd| is_disabled_walking_up(&cwd))
         .unwrap_or(false)
 }
 
@@ -172,5 +184,39 @@ mod tests {
         assert!(!temp.path().join(".rtk").exists());
         disable_in(temp.path()).expect("disable");
         assert!(temp.path().join(".rtk").exists());
+    }
+
+    #[test]
+    fn test_walks_up_from_subdirectory() {
+        // Marker at project root should be found when CWD is a subdirectory.
+        let temp = TempDir::new().expect("tempdir");
+        disable_in(temp.path()).expect("disable at root");
+        let subdir = temp.path().join("src").join("cmds").join("apple");
+        std::fs::create_dir_all(&subdir).expect("mkdir");
+        assert!(is_disabled_walking_up(&subdir));
+    }
+
+    #[test]
+    fn test_walks_up_stops_at_filesystem_root() {
+        // No marker anywhere — walking up all the way to `/` must return false,
+        // not crash or loop forever.
+        let temp = TempDir::new().expect("tempdir");
+        let subdir = temp.path().join("deeply").join("nested");
+        std::fs::create_dir_all(&subdir).expect("mkdir");
+        assert!(!is_disabled_walking_up(&subdir));
+    }
+
+    #[test]
+    fn test_walk_up_finds_nearest_marker() {
+        // If markers exist at multiple ancestor levels, the walk still returns true.
+        let temp = TempDir::new().expect("tempdir");
+        disable_in(temp.path()).expect("root marker");
+        let subdir = temp.path().join("sub");
+        std::fs::create_dir_all(&subdir).expect("mkdir sub");
+        disable_in(&subdir).expect("sub marker");
+        assert!(is_disabled_walking_up(&subdir));
+        let deeper = subdir.join("deeper");
+        std::fs::create_dir_all(&deeper).expect("mkdir deeper");
+        assert!(is_disabled_walking_up(&deeper));
     }
 }

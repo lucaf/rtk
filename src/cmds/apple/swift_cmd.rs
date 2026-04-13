@@ -38,10 +38,7 @@ pub fn run_passthrough(args: &[OsString], verbose: u8) -> Result<i32> {
 
 fn run_build(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("swift");
-    cmd.arg("build");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.arg("build").args(args);
 
     if verbose > 0 {
         eprintln!("Running: swift build {}", args.join(" "));
@@ -148,10 +145,7 @@ fn filter_swift_build(output: &str) -> String {
 
 fn run_test(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("swift");
-    cmd.arg("test");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.arg("test").args(args);
 
     if verbose > 0 {
         eprintln!("Running: swift test {}", args.join(" "));
@@ -268,10 +262,7 @@ fn filter_swift_test(output: &str) -> String {
 
 fn run_run(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("swift");
-    cmd.arg("run");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.arg("run").args(args);
 
     if verbose > 0 {
         eprintln!("Running: swift run {}", args.join(" "));
@@ -342,10 +333,7 @@ fn filter_swift_run(output: &str) -> String {
 
 fn run_package(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("swift");
-    cmd.arg("package");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.arg("package").args(args);
 
     if verbose > 0 {
         eprintln!("Running: swift package {}", args.join(" "));

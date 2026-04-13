@@ -9,9 +9,7 @@ use regex::Regex;
 
 pub fn run(args: &[String], verbose: u8) -> Result<i32> {
     let mut cmd = resolved_command("xcodebuild");
-    for arg in args {
-        cmd.arg(arg);
-    }
+    cmd.args(args);
 
     if verbose > 0 {
         eprintln!("Running: xcodebuild {}", args.join(" "));
@@ -62,9 +60,12 @@ lazy_static! {
     // captures: 1=suite, 2=testName, 3=passed/failed, 4=duration
     static ref XCB_TEST_RESULT_RE: Regex =
         Regex::new(r"^Test case '(\S+?)\.(\S+?)\(\)' (passed|failed) on '[^']+' \(([0-9.]+) seconds\)").unwrap();
-    // CreateBuildDirectory, cd, command-line tool invocations — noise
+    // Noise patterns to strip. The indented-path prefix `\s+/(?:Applications|usr|
+    // Library/Developer|var/folders)/` targets compiler/toolchain invocation lines
+    // but deliberately avoids the broader `\s+/` (which also matched Swift
+    // diagnostic continuation lines like `    /path/File.swift:10: note: ...`).
     static ref NOISE_RE: Regex =
-        Regex::new(r"^(?:CreateBuildDirectory|cd |/Applications/Xcode|Build description|note: |User defaults|Command line invocation|\s+/|Test Suite |Test Case .* started)").unwrap();
+        Regex::new(r"^(?:CreateBuildDirectory|cd |/Applications/Xcode|Build description|note: |User defaults|Command line invocation|\s+/(?:Applications|usr|Library/Developer|var/folders)/|Test Suite |Test Case .* started)").unwrap();
 }
 
 /// Returns true if the output contains any marker we know how to filter:
@@ -387,6 +388,33 @@ mod tests {
         let output = filter_xcodebuild(input);
         assert!(output.contains("Errors (1)"));
         assert!(output.contains("no such module"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_strips_tool_invocations_but_preserves_diagnostics() {
+        // Tool invocation paths under /Applications/Xcode and /usr/ are noise.
+        // Diagnostic continuation lines (paths under /Users or /tmp with :line:col:
+        // format) must be preserved — these carry error context.
+        let input = "\
+SwiftCompile normal arm64 /Users/dev/App/Foo.swift (in target 'App' from project 'App')
+    cd /Users/dev/App
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -c
+    /usr/bin/clang -fmodules
+/Users/dev/App/Foo.swift:10:5: error: cannot find 'Bar' in scope
+    /Users/dev/App/Foo.swift:15:1: note: did you mean 'Baz'?
+** BUILD FAILED **
+";
+        let output = filter_xcodebuild(input);
+        // Error captured
+        assert!(output.contains("cannot find 'Bar' in scope"), "got: {}", output);
+        // Tool invocations stripped
+        assert!(!output.contains("swift-frontend"), "got: {}", output);
+        assert!(!output.contains("/usr/bin/clang"), "got: {}", output);
+        assert!(!output.contains("Applications/Xcode"), "got: {}", output);
+        // Build failed banner propagated
+        assert!(output.contains("BUILD FAILED"));
+        // NOTE: note: continuation is dropped by `note: ` NOISE_RE pattern — that
+        // existing behavior is preserved; only the `\s+/` over-strip was narrowed.
     }
 
     #[test]
