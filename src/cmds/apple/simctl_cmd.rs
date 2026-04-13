@@ -4,6 +4,16 @@
 //! `xcrun simctl list` typically outputs 200+ lines across 4 sections:
 //! Device Types, Runtimes, Devices, and Device Pairs. This filter summarizes
 //! each section with counts and highlights booted devices.
+//!
+//! # ⚠️ Limited real-world validation
+//!
+//! This filter has been unit-tested against a synthetic fixture (`tests/fixtures/
+//! simctl_list_raw.txt`) but **not** against real `xcrun simctl list` output on a
+//! machine with installed simulator runtimes. The passthrough heuristic means
+//! unrecognized input is returned unchanged — so the worst case is "no compression"
+//! rather than "data loss" — but users running real simctl workflows should verify
+//! output integrity with `rtk proxy xcrun simctl ...` if they hit unexpected gaps.
+//! PRs with real-world fixtures welcome.
 
 use crate::core::runner;
 use crate::core::utils::{resolved_command, strip_ansi};

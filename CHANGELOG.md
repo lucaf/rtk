@@ -31,8 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Known limitations
 
+- **`rtk simctl` and `rtk xctrace` are fixture-validated only**: both filters have passed their unit tests against synthetic fixtures and zero-simulator live runs, but have not been validated against real simulator listings or actual Instruments recordings. The passthrough heuristic prevents data loss on unrecognized input (worst case: no compression), but specific subcommands with realistic output have not been verified. See APPLE_MODULE_REVIEW.md §6.1 "Filters with limited real-world validation" for details. PRs welcome.
 - **Cross-module tee-to-stdout bug**: 7 other call sites (aws_cmd, vitest_cmd, playwright_cmd, lint_cmd, gt_cmd, rust/runner, main.rs TOML dispatch) bypass `print_with_hint` and emit the hint to stdout via `println!`. Same fix as `runner::print_with_hint` would apply. Tracked in APPLE_MODULE_REVIEW.md §6.1 as out-of-scope follow-up.
-- **iOS Simulator / xctrace recordings**: untestable on the current development machine (no simulators installed).
 - **Modern Xcode 26 build system**: `xcodebuild build` no longer emits `SwiftCompile`/`Ld` task markers, so compile file counts are missing from filtered output for successful builds. Errors, warnings, and `** BUILD SUCCEEDED/FAILED **` are unaffected.
 
 ### Performance

@@ -368,6 +368,36 @@ After initial validation found 4 bugs, additional gap-closing tests covered:
 - **swift run with crashes** — `fatalError`, array out-of-bounds traps, and explicit `exit(N)` all preserve the crash trace and propagate the correct exit code (133 for signal traps, 42 for explicit `exit(42)`). Build noise stripped, program output and crash details kept.
 - **Unicode / encoding** — XCTest names with CJK ideographs (`testPasses_中文测试`), Japanese/emoji (`test絵文字_🚀_📦`), assertion messages with multi-byte chars (`Erreur française avec ñ é ü © → ×`), unicode in directory paths, RTL Arabic, math symbols, box-drawing — all preserved byte-for-byte. Required relaxing `XCTEST_RESULT_RE` from `(\w+)` to `([^\]]+)` for the test-name capture group; the prior regex silently dropped any test with a non-ASCII name.
 
+### ⚠️ Filters with limited real-world validation
+
+Two filters in this module have been tested only against synthetic or trivially-small fixtures, not against realistic real-world output:
+
+#### `simctl_cmd.rs` (`rtk simctl list`)
+
+- **Unit-tested** against `tests/fixtures/simctl_list_raw.txt` (a hand-constructed fixture covering the 4 sections: Device Types, Runtimes, Devices, Pairs).
+- **Live-tested** only on a machine with zero simulators installed (trivially small output).
+- **Not validated** against realistic `xcrun simctl list` output from a developer machine with 10+ simulator runtimes and 20+ devices.
+- **Subcommands beyond `list`** (`boot`, `shutdown`, `install`, `launch`, `terminate`, `erase`, `addmedia`, `openurl`, `push`, `location`, etc.) are passthrough but their passthrough behavior has not been verified with real output.
+- **`simctl list --json`** (JSON output) — not tested; the passthrough heuristic should keep it intact.
+
+#### `xctrace_cmd.rs` (`rtk xctrace ...`)
+
+- **`xctrace list templates`** and **`xctrace list devices`**: unit-tested against synthetic fixtures; on the development machine both produce trivial output (3 tokens each, no simulators installed).
+- **`xctrace record`**: tested against a hand-constructed fixture that matches the format documented in the `xctrace` man page. Real Instruments recordings have never been run through the filter.
+- **`xctrace export`** (JSON/XML output): not handled explicitly — would go through the generic passthrough.
+- **Failure modes** (ktrace permission denied, "no such device", malformed trace) are not validated.
+
+#### Risk assessment
+
+The passthrough heuristic (`looks_like_build_output` / equivalent) is the primary safety net: when the filter sees input it doesn't recognize, it returns the raw content unchanged instead of producing garbage. This means:
+
+- **Worst case**: filter adds no compression (output == raw, minor token overhead for the filter's header).
+- **Not possible**: data loss like the pre-fix xcodebuild `-list` behavior, because the passthrough check runs first.
+
+However, **specific subcommands with real output that happens to match the filter's signal patterns** could produce unexpected results. If you use `rtk simctl` or `rtk xctrace` daily, verify your specific commands produce useful filtered output; fall back to `rtk proxy xcrun <cmd>` to bypass the filter if needed.
+
+PRs adding real-world fixtures for these filters are welcome.
+
 ### Out-of-scope follow-up: tee-to-stdout in other modules
 
 The "tee hint corrupting machine-readable stdout" bug (#5 above) was fixed in `src/core/runner.rs::print_with_hint`, which is what the Apple module uses. **The same pattern appears in 6 other module entry points** that bypass `print_with_hint` and call `println!("{}\n{}", filtered, hint)` directly:

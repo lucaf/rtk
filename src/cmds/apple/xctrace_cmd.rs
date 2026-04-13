@@ -5,6 +5,21 @@
 //! - `xctrace list templates`: strips descriptions, shows template names only
 //! - `xctrace list devices`:  compact device list grouped by OS, strips UUIDs
 //! - `xctrace record`:        strips progress noise, keeps summary + heaviest stacks
+//!
+//! # ⚠️ Limited real-world validation
+//!
+//! This filter has been unit-tested against synthetic fixtures and on a machine
+//! with no simulators installed. It has **not** been validated against:
+//! - `xctrace list devices` with real physical iOS/iPadOS/watchOS/tvOS devices
+//! - `xctrace record` with an actual Instruments trace (only a hand-constructed
+//!   fixture matching the man-page format)
+//! - `xctrace export` (JSON/XML output formats)
+//!
+//! The passthrough heuristic means unrecognized input is returned unchanged —
+//! so the worst case is "no compression" rather than "data loss" — but users
+//! running real Instruments workflows should verify output integrity with
+//! `rtk proxy xcrun xctrace ...` if they hit unexpected gaps. PRs with
+//! real-world fixtures welcome.
 
 use crate::core::runner;
 use crate::core::utils::{resolved_command, strip_ansi};
