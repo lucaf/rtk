@@ -56,15 +56,18 @@ fn run_build(args: &[String], verbose: u8) -> Result<i32> {
 lazy_static! {
     static ref BUILD_PROGRESS_RE: Regex =
         Regex::new(r"^\[(\d+)/(\d+)\]").unwrap();
-    // Swift compiler error/warning. Covers multiple formats. Path prefix may
-    // contain spaces, so we use `.+?` (non-greedy) instead of `\S+`.
+    // Swift compiler error/warning. The optional prefix is restricted to
+    // path-like tokens ending in .swift/.xcodeproj/.xcconfig with an optional
+    // :line:col, which avoids false positives from log lines like
+    // `Logger.log: error: ...` or `dyld: error: ...` that are NOT compile errors.
+    // Path component may contain spaces.
     //   /path/File.swift:10:5: error: message       (source file error)
     //   /path/Package.swift: error: message         (package-level error)
-    //   error: message                              (top-level error)
+    //   error: message                              (top-level compiler error)
     static ref BUILD_ERROR_RE: Regex =
-        Regex::new(r"^(?:.+?:\s+)?error:\s").unwrap();
+        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?error:\s").unwrap();
     static ref BUILD_WARNING_RE: Regex =
-        Regex::new(r"^(?:.+?:\s+)?warning:\s").unwrap();
+        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?warning:\s").unwrap();
     // "Build complete! (3.42s)" or "Build of product 'Foo' complete! (0.28s)"
     static ref BUILD_COMPLETE_RE: Regex =
         Regex::new(r"^Build (?:of product '.+' )?complete!").unwrap();
@@ -190,7 +193,12 @@ fn filter_swift_test(output: &str) -> String {
     for line in clean.lines() {
         let trimmed = line.trim();
 
-        // XCTest results
+        // XCTest results. Note: the failure label drops caps[1] (module name) on
+        // purpose — in a `swift test` run the module is always the same, so
+        // `Suite.testName` is unambiguous and less noisy than
+        // `Module.Suite.testName`. (This differs from xcodebuild_cmd's modern
+        // XCB_TEST_RESULT_RE path, which needs caps[1]+caps[2] because Swift
+        // Testing emits dotted nested suites in the first capture.)
         if let Some(caps) = XCTEST_RESULT_RE.captures(trimmed) {
             let suite = &caps[2];
             let test_name = &caps[3];

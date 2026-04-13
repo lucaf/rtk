@@ -37,14 +37,20 @@ lazy_static! {
     // Resolved source packages lines (matched against trimmed input)
     static ref RESOLVED_PKG_RE: Regex =
         Regex::new(r"^(\S+):\s+\S+\s+@\s+(\S+)").unwrap();
-    // Error/warning lines — covers multiple xcodebuild formats. Path prefix may
-    // contain spaces (e.g. "/tmp/metal code examples/Foo.xcodeproj"), so we use
-    // `.+?` (non-greedy) instead of `\S+`.
+    // Error/warning lines — covers multiple xcodebuild formats. The optional
+    // prefix is restricted to path-like tokens ending in .swift/.xcodeproj/
+    // .xcconfig with an optional :line:col, which avoids false positives from
+    // log lines like `Logger.log: error: ...` or `dyld: error: ...` that are
+    // NOT actual compile errors. Path component may contain spaces
+    // (e.g. "/tmp/metal code examples/Foo.xcodeproj").
     //   /path/File.swift:10:5: error: message       (source file error)
     //   /path/Project.xcodeproj: error: message     (project-level error, e.g. signing)
-    //   error: message                              (top-level error)
-    static ref ERROR_RE: Regex = Regex::new(r"^(?:.+?:\s+)?error:\s").unwrap();
-    static ref WARNING_RE: Regex = Regex::new(r"^(?:.+?:\s+)?warning:\s").unwrap();
+    //   Package.swift: error: message               (package-level error)
+    //   error: message                              (top-level compiler error)
+    static ref ERROR_RE: Regex =
+        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?error:\s").unwrap();
+    static ref WARNING_RE: Regex =
+        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?warning:\s").unwrap();
     // ** BUILD SUCCEEDED ** / ** BUILD FAILED ** / ** TEST SUCCEEDED ** etc.
     static ref BUILD_RESULT_RE: Regex =
         Regex::new(r"^\*\* (BUILD|TEST|CLEAN) (SUCCEEDED|FAILED) \*\*").unwrap();
@@ -388,6 +394,21 @@ mod tests {
         let output = filter_xcodebuild(input);
         assert!(output.contains("Errors (1)"));
         assert!(output.contains("no such module"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_no_false_positives_on_non_path_error_prefix() {
+        // Log-style lines with `Tag: error: ...` format should NOT be classified
+        // as compile errors. Only `*.swift/xcodeproj/xcconfig:` prefixes count.
+        let input = "SwiftCompile normal arm64 /p/Foo.swift (in target 'App' from project 'App')\n\
+            Logger.log: error: program fatal issue\n\
+            dyld: error: library not loaded\n\
+            ** BUILD SUCCEEDED **\n";
+        let output = filter_xcodebuild(input);
+        // Build should be reported as succeeded
+        assert!(output.contains("BUILD SUCCEEDED"));
+        // No error section, because no real compile errors
+        assert!(!output.contains("Errors ("), "got: {}", output);
     }
 
     #[test]
