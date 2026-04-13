@@ -47,10 +47,21 @@ lazy_static! {
     //   /path/Project.xcodeproj: error: message     (project-level error, e.g. signing)
     //   Package.swift: error: message               (package-level error)
     //   error: message                              (top-level compiler error)
+    // Source/project file extensions covered: Swift, ObjC, ObjC++, C, C++, headers,
+    // and Xcode project files (xcodeproj, xcconfig, pbxproj). Mixed Apple projects
+    // routinely surface diagnostics from all of these.
     static ref ERROR_RE: Regex =
-        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?error:\s").unwrap();
+        Regex::new(r"^(?:\S.*?\.(?:swift|m|mm|h|c|cpp|cc|xcodeproj|xcconfig|pbxproj)(?::\d+(?::\d+)?)?:\s+)?error:\s").unwrap();
     static ref WARNING_RE: Regex =
-        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?warning:\s").unwrap();
+        Regex::new(r"^(?:\S.*?\.(?:swift|m|mm|h|c|cpp|cc|xcodeproj|xcconfig|pbxproj)(?::\d+(?::\d+)?)?:\s+)?warning:\s").unwrap();
+    // Diagnostic `note:` lines that DO carry a file path — e.g.
+    //   /path/File.swift:15:1: note: did you mean 'Baz'?
+    // These are fix-suggestions that add context to the preceding error.
+    // Distinct from `NOISE_RE`'s `^note: ` alternative which strips bare
+    // unanchored `note: Using new build system` / `note: Target dependency graph`
+    // status lines with no source location.
+    static ref NOTE_WITH_PATH_RE: Regex =
+        Regex::new(r"^\S.*?\.(?:swift|m|mm|h|c|cpp|cc)(?::\d+(?::\d+)?)?:\s+note:\s").unwrap();
     // ** BUILD SUCCEEDED ** / ** BUILD FAILED ** / ** TEST SUCCEEDED ** etc.
     static ref BUILD_RESULT_RE: Regex =
         Regex::new(r"^\*\* (BUILD|TEST|CLEAN) (SUCCEEDED|FAILED) \*\*").unwrap();
@@ -115,6 +126,7 @@ fn filter_xcodebuild(output: &str) -> String {
     let mut resolved_packages: Vec<(String, String)> = Vec::new(); // (name, version)
     let mut errors: Vec<String> = Vec::new();
     let mut warnings: Vec<String> = Vec::new();
+    let mut notes: Vec<String> = Vec::new();
     let mut build_result = String::new();
     let mut tests_passed = 0u32;
     let mut tests_failed = 0u32;
@@ -196,6 +208,10 @@ fn filter_xcodebuild(output: &str) -> String {
             errors.push(trimmed.to_string());
         } else if WARNING_RE.is_match(trimmed) {
             warnings.push(trimmed.to_string());
+        } else if NOTE_WITH_PATH_RE.is_match(trimmed) {
+            // Path-prefixed `note:` lines (e.g. `did you mean 'Baz'?`) add
+            // context to the preceding diagnostic — worth preserving.
+            notes.push(trimmed.to_string());
         }
     }
 
@@ -251,6 +267,17 @@ fn filter_xcodebuild(output: &str) -> String {
         }
         if warnings.len() > 10 {
             result.push_str(&format!("  ... +{} more\n", warnings.len() - 10));
+        }
+    }
+
+    // Notes (Swift `did you mean X?` and similar diagnostic context)
+    if !notes.is_empty() {
+        result.push_str(&format!("\nNotes ({}):\n", notes.len()));
+        for n in notes.iter().take(10) {
+            result.push_str(&format!("  {}\n", n));
+        }
+        if notes.len() > 10 {
+            result.push_str(&format!("  ... +{} more\n", notes.len() - 10));
         }
     }
 
@@ -394,6 +421,26 @@ mod tests {
         let output = filter_xcodebuild(input);
         assert!(output.contains("Errors (1)"));
         assert!(output.contains("no such module"));
+    }
+
+    #[test]
+    fn test_filter_xcodebuild_captures_objc_c_and_pbxproj_errors() {
+        // Mixed Apple projects emit diagnostics from .m/.mm/.h/.c/.cpp and
+        // occasionally .pbxproj. All must be captured.
+        let input = "\
+/path/MyClass.m:10:5: error: property 'foo' not found on object of type 'Bar *'
+/path/Bridge.h:5:1: error: expected ';' after @interface
+/path/Legacy.cpp:42:10: warning: unused variable 'x'
+/path/App.pbxproj: error: project file corrupt
+** BUILD FAILED **
+";
+        let output = filter_xcodebuild(input);
+        assert!(output.contains("Errors (3)"), "got: {}", output);
+        assert!(output.contains("Warnings (1)"), "got: {}", output);
+        assert!(output.contains("property 'foo' not found"), "got: {}", output);
+        assert!(output.contains("expected ';'"), "got: {}", output);
+        assert!(output.contains("project file corrupt"), "got: {}", output);
+        assert!(output.contains("unused variable 'x'"), "got: {}", output);
     }
 
     #[test]

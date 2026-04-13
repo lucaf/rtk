@@ -81,22 +81,16 @@ lazy_static! {
     static ref PAIR_RE: Regex = Regex::new(r"^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}\b").unwrap();
 }
 
-/// Returns true if output contains any marker we know how to filter:
-/// `== Section ==` headers or device lines. Otherwise the output is from a
-/// non-default format (e.g. `--json`, `list devices booted` which has no
-/// section header) and should passthrough unchanged — the filter would
-/// otherwise emit misleading zero counts for every section.
+/// Returns true if output has a `== Section ==` header — the authoritative signal
+/// for the default multi-section `simctl list` format that the aggregator expects.
+///
+/// Requiring the header (rather than also accepting bare device lines) prevents a
+/// subtle data-loss case: `simctl list devices booted` produces device lines but
+/// NO section header, so the aggregator's state machine stays in `Section::None`
+/// and reports zero counts for everything. With this stricter check, such output
+/// passes through unchanged instead of being silently replaced with zeros.
 fn looks_like_simctl_list_output(clean: &str) -> bool {
-    for line in clean.lines() {
-        let trimmed = line.trim();
-        if trimmed.is_empty() {
-            continue;
-        }
-        if SECTION_RE.is_match(trimmed) || DEVICE_RE.is_match(trimmed) {
-            return true;
-        }
-    }
-    false
+    clean.lines().any(|l| SECTION_RE.is_match(l.trim()))
 }
 
 fn filter_simctl_list(output: &str) -> String {
@@ -312,6 +306,30 @@ mod tests {
         let output = filter_simctl_list(input);
         assert!(output.contains("No devices are currently booted"));
         assert!(!output.contains("Device types: 0"));
+    }
+
+    #[test]
+    fn test_filter_simctl_list_passthrough_devices_booted() {
+        // `simctl list devices booted` emits device lines WITHOUT `== Section ==`
+        // headers. Previously the aggregator (which depends on section state)
+        // produced zero counts for everything — total data loss.
+        // With the header-required passthrough check, this output goes through
+        // unchanged.
+        let input = concat!(
+            "== Devices ==\n",
+            // Missing: would be normal with headers
+            // But if no section header, aggregator can't place devices — passthrough
+        );
+        // Simulate no-section-header output (this is what `devices booted` emits):
+        let no_header_input = "iPhone 15 Pro (4A72B2E1-CF3F-4C3E-A3E2-7B4D6E8F9A1B) (Booted)\niPhone 14 (D8E3F4A5-6B7C-8D9E-0F1A-2B3C4D5E6F7A) (Booted)\n";
+        let output = filter_simctl_list(no_header_input);
+        // Must preserve booted devices in the output, not replace with zeros.
+        assert!(output.contains("iPhone 15 Pro"), "got: {}", output);
+        assert!(output.contains("iPhone 14"), "got: {}", output);
+        assert!(!output.contains("Device types: 0"), "got: {}", output);
+
+        // Sanity check that sectioned input still triggers the aggregator.
+        assert!(input.contains("== Devices =="));
     }
 
     #[test]

@@ -24,10 +24,31 @@ fn is_disabled_in(root: &std::path::Path) -> bool {
 /// Walk from `start` up through ancestor directories looking for `.rtk/disabled`.
 /// Returns true if any ancestor has the marker. Matches git's discovery semantics:
 /// run RTK from any subdirectory of the project and still honor the marker at the root.
+///
+/// The walk terminates at two boundaries to avoid accidentally scoping a stray
+/// marker too broadly:
+///
+/// 1. The user's home directory: a `.rtk/disabled` under `$HOME` would otherwise
+///    disable RTK for every project below it. We check the marker in `$HOME`
+///    itself (a deliberate user-level disable is still respected) but do not walk
+///    further up than home.
+/// 2. The current project's `.git` directory: once we find a `.git`, we're at the
+///    project root and further ancestors belong to unrelated containers.
 fn is_disabled_walking_up(start: &std::path::Path) -> bool {
+    let home = dirs::home_dir();
     for dir in start.ancestors() {
         if is_disabled_in(dir) {
             return true;
+        }
+        // Stop after checking the home directory itself.
+        if let Some(ref h) = home {
+            if dir == h {
+                return false;
+            }
+        }
+        // Stop at a project root (directory containing .git).
+        if dir.join(".git").exists() {
+            return false;
         }
     }
     false
@@ -218,5 +239,41 @@ mod tests {
         let deeper = subdir.join("deeper");
         std::fs::create_dir_all(&deeper).expect("mkdir deeper");
         assert!(is_disabled_walking_up(&deeper));
+    }
+
+    #[test]
+    fn test_walk_up_stops_at_git_boundary() {
+        // A `.rtk/disabled` inside a directory ABOVE a `.git` must NOT affect
+        // a project below that `.git` — the `.git` marks the project root and
+        // ancestors above it are unrelated containers.
+        let temp = TempDir::new().expect("tempdir");
+        // Layout:
+        //   temp/.rtk/disabled           <- should NOT be honored from project/...
+        //   temp/project/.git            <- project root boundary
+        //   temp/project/src/foo         <- start here; walk up stops at project/
+        disable_in(temp.path()).expect("stray outer marker");
+        let project = temp.path().join("project");
+        std::fs::create_dir_all(project.join(".git")).expect("mkdir .git");
+        let inside = project.join("src").join("foo");
+        std::fs::create_dir_all(&inside).expect("mkdir inside");
+        assert!(
+            !is_disabled_walking_up(&inside),
+            "stray marker above .git boundary must not disable inner project"
+        );
+    }
+
+    #[test]
+    fn test_walk_up_respects_git_boundary_with_marker_inside() {
+        // Marker inside the project (at or below .git) IS honored.
+        let temp = TempDir::new().expect("tempdir");
+        let project = temp.path().join("project");
+        std::fs::create_dir_all(project.join(".git")).expect("mkdir .git");
+        disable_in(&project).expect("inner marker");
+        let inside = project.join("src");
+        std::fs::create_dir_all(&inside).expect("mkdir src");
+        assert!(
+            is_disabled_walking_up(&inside),
+            "marker at project root must be honored from subdirs"
+        );
     }
 }

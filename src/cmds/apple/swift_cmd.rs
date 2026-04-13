@@ -64,10 +64,16 @@ lazy_static! {
     //   /path/File.swift:10:5: error: message       (source file error)
     //   /path/Package.swift: error: message         (package-level error)
     //   error: message                              (top-level compiler error)
+    // Extensions cover Swift plus ObjC/C/C++/headers and Xcode project files —
+    // Swift packages can bridge ObjC via SwiftPM system/target dependencies.
     static ref BUILD_ERROR_RE: Regex =
-        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?error:\s").unwrap();
+        Regex::new(r"^(?:\S.*?\.(?:swift|m|mm|h|c|cpp|cc|xcodeproj|xcconfig|pbxproj)(?::\d+(?::\d+)?)?:\s+)?error:\s").unwrap();
     static ref BUILD_WARNING_RE: Regex =
-        Regex::new(r"^(?:\S.*?\.(?:swift|xcodeproj|xcconfig)(?::\d+(?::\d+)?)?:\s+)?warning:\s").unwrap();
+        Regex::new(r"^(?:\S.*?\.(?:swift|m|mm|h|c|cpp|cc|xcodeproj|xcconfig|pbxproj)(?::\d+(?::\d+)?)?:\s+)?warning:\s").unwrap();
+    // Path-prefixed diagnostic `note:` — Swift fix-suggestions like
+    // `did you mean 'Baz'?` that add context to a preceding error.
+    static ref BUILD_NOTE_RE: Regex =
+        Regex::new(r"^\S.*?\.(?:swift|m|mm|h|c|cpp|cc)(?::\d+(?::\d+)?)?:\s+note:\s").unwrap();
     // "Build complete! (3.42s)" or "Build of product 'Foo' complete! (0.28s)"
     static ref BUILD_COMPLETE_RE: Regex =
         Regex::new(r"^Build (?:of product '.+' )?complete!").unwrap();
@@ -79,6 +85,7 @@ fn filter_swift_build(output: &str) -> String {
     let clean = strip_ansi(output);
     let mut errors: Vec<&str> = Vec::new();
     let mut warnings: Vec<&str> = Vec::new();
+    let mut notes: Vec<&str> = Vec::new();
     let mut max_step = 0u32;
     let mut total_steps = 0u32;
     let mut build_result = String::new();
@@ -104,6 +111,8 @@ fn filter_swift_build(output: &str) -> String {
             errors.push(trimmed);
         } else if BUILD_WARNING_RE.is_match(trimmed) {
             warnings.push(trimmed);
+        } else if BUILD_NOTE_RE.is_match(trimmed) {
+            notes.push(trimmed);
         }
 
         if BUILD_COMPLETE_RE.is_match(trimmed) || BUILD_FAILED_RE.is_match(trimmed) {
@@ -132,6 +141,17 @@ fn filter_swift_build(output: &str) -> String {
         }
         if warnings.len() > 10 {
             result.push_str(&format!("  ... +{} more\n", warnings.len() - 10));
+        }
+    }
+
+    // Notes (Swift fix-suggestions like `did you mean 'Baz'?`)
+    if !notes.is_empty() {
+        result.push_str(&format!("\nNotes ({}):\n", notes.len()));
+        for n in notes.iter().take(10) {
+            result.push_str(&format!("  {}\n", n));
+        }
+        if notes.len() > 10 {
+            result.push_str(&format!("  ... +{} more\n", notes.len() - 10));
         }
     }
 
@@ -572,6 +592,20 @@ mod tests {
     fn test_filter_swift_build_empty() {
         let output = filter_swift_build("");
         assert!(output.contains("swift build"));
+    }
+
+    #[test]
+    fn test_filter_swift_build_preserves_note_continuations() {
+        // Swift emits fix-suggestion `note:` lines with file:line prefixes.
+        // These were previously dropped; they should be captured as context.
+        let input = "Building for debugging...\n\
+            /path/Foo.swift:10:5: error: cannot find 'Bar' in scope\n\
+            /path/Foo.swift:15:1: note: did you mean 'Baz'?\n\
+            error: build had 1 command failure\n";
+        let output = filter_swift_build(input);
+        assert!(output.contains("cannot find 'Bar'"), "got: {}", output);
+        assert!(output.contains("Notes (1)"), "got: {}", output);
+        assert!(output.contains("did you mean 'Baz'"), "got: {}", output);
     }
 
     #[test]
