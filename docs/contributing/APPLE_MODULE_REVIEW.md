@@ -278,22 +278,94 @@ The `filter_swift_package` function only understands `swift package describe` ou
 
 ## 6. Real-World Savings Data
 
-Measured against a real Swift project (PsyScopeTahoe — 19 targets, 112 tests):
+Measured against real Swift projects:
+
+### PsyScopeTahoe (19 targets, 112 tests)
 
 | Command | Raw tokens | Filtered | Savings |
 |---------|-----------|----------|---------|
 | `swift test` | 2,426 | 64 | **97.4%** |
 | `swift package describe` | 471 | 45 | **90.4%** |
+| `swiftlint` | 709 lines | 23 lines | **97%** |
 | `swift build` (cached) | 12 | 8 | 33.3% |
 | `swift run PsyScopeTest` | 1,296 | 1,281 | 1.2% |
-| `xctrace list devices` | 7 | 2 | 71.4% |
+
+### Apple open-source projects (stress tests)
+
+| Project | Command | Raw tokens | Filtered | Savings |
+|---------|---------|-----------|----------|---------|
+| swift-algorithms | `swift test` | 3,672 | 6 | **99.8%** (224 tests) |
+| swift-argument-parser | `swift test` | 9,358 | 6 | **99.9%** (558 tests) |
+| swift-argument-parser | `swift build` | 1,759 | 112 | 93.6% (26 warnings) |
+| swift-collections | `swift test` | 13,024 | 6 | **100.0%** (772 tests) |
+| swift-syntax | `swift test` | 49,493 | 6 | **99.988%** (3,528 tests) |
+| swift-syntax | `swiftlint Sources` | 114,946 | 115 | **99.9%** (39 rules, 6566 violations) |
 
 Key observations:
 
-- **`swift test` and `swift package`** deliver excellent savings (90%+) and are the highest-value filters for LLM-assisted Swift workflows.
+- **`swift test`** consistently delivers 99%+ savings regardless of suite size (224 → 3,528 tests). Test counts and failure names/messages are preserved exactly.
+- **`swift package describe`** delivers 90%+ savings across all projects tested.
+- **`swiftlint`** aggregates thousands of violations into a compact rule summary with per-rule counts and file counts preserved.
 - **`swift build`** savings scale with compilation volume. Cached/no-op builds are trivially small so there is nothing to strip; full rebuilds with many compilation steps would see 70%+ savings.
 - **`swift run`** preserves program output by design. Savings depend on the ratio of build lines to runtime output. A program with verbose output and a cached build is the worst case.
 - **`xctrace list devices`** savings scale with the number of installed simulators. A machine with no Xcode simulators has trivially small output.
+
+---
+
+## 6.1. Rigorous Validation (Regression Protection)
+
+A validation harness at `scripts/validate-apple/` programmatically verifies that no critical signal is silently dropped by the filters. It runs **71 scenarios** across **11 Apple open-source projects** plus synthetic failure-injection cases.
+
+### What the harness verifies
+
+For every project:
+
+1. **Package describe** — package name, targets, and product count preserved
+2. **Build (cached)** — success signal propagates
+3. **Build with injected compile error** — error file:line location preserved, error count matches raw, injection-related error (`cannot find`) visible
+4. **Test passing** — test pass/fail counts match raw (XCTest + Swift Testing)
+5. **Test with injected failure** — failure name enumerated, file:line preserved, `XCTAssert` message preserved verbatim
+6. **Swiftlint rule aggregation** — per-rule counts exactly match raw; truncated rules accounted for by `+N more rules` counter
+7. **Warning truncation math** — `shown_in_output + "+N more" == declared_total`
+8. **Error ordering preservation** — filter does not reshuffle errors relative to raw order
+
+### Projects covered
+
+- swift-algorithms (224 tests)
+- swift-argument-parser (558 tests, 26 warnings)
+- swift-async-algorithms (async patterns)
+- swift-collections (772 tests across 11 libraries)
+- swift-crypto (C/Swift mixed)
+- swift-docc (CLI tool)
+- swift-format (executable + plugins)
+- swift-log (lightweight library)
+- swift-nio (production-scale networking)
+- swift-numerics (math)
+- swift-syntax (3,528 tests, 6566 lint violations)
+
+### Current result
+
+**71/71 scenarios pass** across the matrix of 11 projects × 5 scenarios plus 16 dedicated failure-path and edge-case tests.
+
+### Data-loss bugs fixed during validation development
+
+The rigorous harness uncovered **4 data-loss bugs** that escaped unit-test coverage. All fixed in the merge commit that added validation:
+
+1. **Informational subcommands silently dropped** — `xcodebuild -list` / `-version` / `-showsdks` and `swiftlint version` / `rules` had output replaced with the filter's fixed header. Fixed by adding passthrough heuristic (if no build/lint markers detected, return raw unchanged).
+2. **`ERROR_RE` too narrow** — only matched source-file format (`path:line:col: error:`). Project-level errors (signing, provisioning) and top-level errors (`error: emit-module failed`) were dropped. Broadened to `^(?:.+?:\s+)?error:\s`.
+3. **Paths with spaces not matched** — `\S+` couldn't capture paths like `/tmp/metal code examples/Foo.xcodeproj`. Changed to non-greedy `.+?`.
+4. **`swift package dump-package` JSON dropped** — the describe-format filter was incorrectly applied to JSON output. Removed from dispatch + added safety-net passthrough inside `filter_swift_package`.
+
+### How to re-run validation
+
+```bash
+# Requires the 11 Apple projects cloned in /tmp/ and swiftlint installed
+python3 scripts/validate-apple/validate_all.py
+python3 scripts/validate-apple/validate_failures.py
+python3 scripts/validate-apple/validate_deep.py
+```
+
+The validators auto-inject bugs into source/test files and restore them with try/finally. If a run is interrupted, `git checkout Sources/ Tests/` in the affected project will restore clean state.
 
 ---
 
